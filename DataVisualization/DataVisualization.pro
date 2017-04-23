@@ -8,7 +8,7 @@ QT       += core gui
 
 CONFIG += c++11
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport positioning
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport positioning network
 
 TARGET = DataVisualization
 TEMPLATE = app
@@ -33,7 +33,9 @@ SOURCES += main.cpp\
     Message.cpp \
     MapProvider.cpp \
     FileMapProvider.cpp \
-    ColorMapOverlay.cpp
+    ColorMapOverlay.cpp \
+    GUI/ServerStatus.cpp \
+    GUI/TimeStatus.cpp
 
 HEADERS  += MainWindow.h \
     qcustomplot.h \
@@ -44,6 +46,11 @@ HEADERS  += MainWindow.h \
     MapFragment.h \
     FileMapProvider.h \
     MapOverlay.h \
-    ColorMapOverlay.h
+    ColorMapOverlay.h \
+    GUI/ServerStatus.h \
+    GUI/TimeStatus.h \
+    ServerStatus.h
 
-FORMS    += MainWindow.ui
+FORMS    += MainWindow.ui \
+    GUI/ServerStatus.ui \
+    GUI/TimeStatus.ui
