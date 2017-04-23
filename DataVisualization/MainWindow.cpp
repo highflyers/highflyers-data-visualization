@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     timer->setSingleShot(false);
     connect(timer, SIGNAL(timeout()), this, SLOT(timerTimeout()));
     timer->start(1000);
+
 }
 
 MainWindow::~MainWindow()

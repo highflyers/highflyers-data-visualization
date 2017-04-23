@@ -35,7 +35,9 @@ SOURCES += main.cpp\
     FileMapProvider.cpp \
     ColorMapOverlay.cpp \
     GUI/ServerStatus.cpp \
-    GUI/TimeStatus.cpp
+    GUI/TimeStatus.cpp \
+    GUI/VehicleWidget.cpp \
+    GUI/VehicleContainer.cpp
 
 HEADERS  += MainWindow.h \
     qcustomplot.h \
@@ -49,8 +51,12 @@ HEADERS  += MainWindow.h \
     ColorMapOverlay.h \
     GUI/ServerStatus.h \
     GUI/TimeStatus.h \
-    ServerStatus.h
+    ServerStatus.h \
+    GUI/VehicleWidget.h \
+    GUI/VehicleContainer.h
 
 FORMS    += MainWindow.ui \
     GUI/ServerStatus.ui \
-    GUI/TimeStatus.ui
+    GUI/TimeStatus.ui \
+    GUI/VehicleWidget.ui \
+    GUI/VehicleContainer.ui
