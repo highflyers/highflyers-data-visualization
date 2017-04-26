@@ -29,12 +29,15 @@ signals:
 
 public slots:
     void updateOverlay(const QImage &overlay);
+    void updatePath(const QImage &path);
 
 private:
     QLabel *label;
     int h, w;
     QPixmap *mapImagePixmap = nullptr;
     QImage *mapImage = nullptr;
+    QImage overlay, path;
+    void redrawContents();
 };
 
 #endif // MAPWIDGET_H

@@ -7,9 +7,9 @@
 #include <QPixmap>
 #include <QSharedPointer>
 
-#include <FileMapProvider.h>
-#include <MapFragment.h>
-#include <ColorMapOverlay.h>
+#include <MapImageManipulation/FileMapProvider.h>
+#include <MapImageManipulation/MapFragment.h>
+#include <MapImageManipulation/ColorMapOverlay.h>
 
 namespace Ui {
 class MainWindow;
@@ -28,7 +28,8 @@ private:
     QTimer *timer;
     MapProvider *mapProvider;
     QSharedPointer<MapFragment> mapFragment;
-    ColorMapOverlay *colorMapOverlay;
+    MapOverlay *colorMapOverlay;
+    MapOverlay *pathOverlay;
 
 private slots:
     void timerTimeout();

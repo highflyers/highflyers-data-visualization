@@ -7,7 +7,7 @@
 #include <QPair>
 #include <QtPositioning/QGeoCoordinate>
 
-#include <MapFragment.h>
+#include <MapImageManipulation/MapFragment.h>
 
 /**
  * @brief An interface for all map provider classes.

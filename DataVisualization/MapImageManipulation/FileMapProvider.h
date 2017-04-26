@@ -1,7 +1,7 @@
 #ifndef FILEMAPPROVIDER_H
 #define FILEMAPPROVIDER_H
 
-#include <MapProvider.h>
+#include <MapImageManipulation/MapProvider.h>
 #include <QString>
 #include <QPixmap>
 

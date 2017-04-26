@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include <MapOverlay.h>
+#include <MapImageManipulation/MapOverlay.h>
 #include <qcustomplot.h>
 
 class ColorMapOverlay : public MapOverlay
