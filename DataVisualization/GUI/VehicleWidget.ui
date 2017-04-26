@@ -122,7 +122,7 @@
          </widget>
         </item>
         <item row="2" column="0" colspan="2">
-         <widget class="QWidget" name="widget" native="true"/>
+         <widget class="QCustomPlot" name="chart" native="true"/>
         </item>
        </layout>
       </item>
@@ -131,6 +131,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

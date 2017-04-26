@@ -2,6 +2,7 @@
 #define MESSAGE_H
 
 #include <QObject>
+#include <QtPositioning/QGeoCoordinate>
 
 /**
  * @brief Representation of a data sent by drone
@@ -9,12 +10,19 @@
 class Message : public QObject
 {
     Q_OBJECT
+
+private:
+    static const unsigned MESSAGE_DATA_SIZE = 16;
+
 public:
     explicit Message(QObject *parent = 0);
 
-signals:
+    int ID;
+    QString name;
+    QGeoCoordinate position;
+    int data[MESSAGE_DATA_SIZE];
 
-public slots:
+    QString toString();
 };
 
 #endif // MESSAGE_H
