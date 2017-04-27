@@ -23,6 +23,18 @@ void MapWidget::resizeEvent(QResizeEvent *event)
 
 void MapWidget::updateOverlay(const QImage &overlay)
 {
+    this->overlay = overlay;
+    redrawContents();
+}
+
+void MapWidget::updatePath(const QImage &path)
+{
+    this->path = path;
+    redrawContents();
+}
+
+void MapWidget::redrawContents()
+{
     QPainter::CompositionMode mode = QPainter::CompositionMode_Multiply;
 
     QImage resultImage = QImage(w, h, QImage::Format_ARGB32_Premultiplied);
@@ -31,6 +43,8 @@ void MapWidget::updateOverlay(const QImage &overlay)
     painter.fillRect(resultImage.rect(), Qt::transparent);
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
     painter.drawImage(0, 0, overlay.scaled(w, h));
+    painter.setCompositionMode(mode);
+    painter.drawImage(0, 0, path.scaled(w, h));
     painter.setCompositionMode(mode);
     painter.drawImage(0, 0, (*mapImage).scaled(w, h));
     painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);

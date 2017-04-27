@@ -8,7 +8,7 @@ QT       += core gui
 
 CONFIG += c++11
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport positioning
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport positioning network
 
 TARGET = DataVisualization
 TEMPLATE = app
@@ -29,21 +29,36 @@ SOURCES += main.cpp\
         MainWindow.cpp \
     qcustomplot.cpp \
     MapWidget.cpp \
-    ImageMixer.cpp \
     Message.cpp \
-    MapProvider.cpp \
-    FileMapProvider.cpp \
-    ColorMapOverlay.cpp
+    GUI/ServerStatus.cpp \
+    GUI/TimeStatus.cpp \
+    GUI/VehicleWidget.cpp \
+    GUI/VehicleContainer.cpp \
+    MapImageManipulation/ColorMapOverlay.cpp \
+    MapImageManipulation/FileMapProvider.cpp \
+    MapImageManipulation/ImageMixer.cpp \
+    MapImageManipulation/MapProvider.cpp \
+    MapImageManipulation/PathOverlay.cpp
 
 HEADERS  += MainWindow.h \
     qcustomplot.h \
     MapWidget.h \
-    ImageMixer.h \
     Message.h \
-    MapProvider.h \
-    MapFragment.h \
-    FileMapProvider.h \
-    MapOverlay.h \
-    ColorMapOverlay.h
+    GUI/ServerStatus.h \
+    GUI/TimeStatus.h \
+    ServerStatus.h \
+    GUI/VehicleWidget.h \
+    GUI/VehicleContainer.h \
+    MapImageManipulation/ColorMapOverlay.h \
+    MapImageManipulation/FileMapProvider.h \
+    MapImageManipulation/ImageMixer.h \
+    MapImageManipulation/MapFragment.h \
+    MapImageManipulation/MapOverlay.h \
+    MapImageManipulation/MapProvider.h \
+    MapImageManipulation/PathOverlay.h
 
-FORMS    += MainWindow.ui
+FORMS    += MainWindow.ui \
+    GUI/ServerStatus.ui \
+    GUI/TimeStatus.ui \
+    GUI/VehicleWidget.ui \
+    GUI/VehicleContainer.ui

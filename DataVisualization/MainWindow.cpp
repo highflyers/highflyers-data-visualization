@@ -6,6 +6,10 @@
 #include <QPair>
 #include <QtPositioning/QGeoCoordinate>
 
+#include <MapImageManipulation/PathOverlay.h>
+
+#include <QDebug>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -23,11 +27,13 @@ MainWindow::MainWindow(QWidget *parent) :
     mapFragment = mapProvider->getImage(coordPair);
 
     colorMapOverlay = new ColorMapOverlay(mapFragment->image.width(), mapFragment->image.height(), this);
+    pathOverlay = new PathOverlay(mapFragment->image.width(), mapFragment->image.height(), this);
 
     timer = new QTimer(this);
     timer->setSingleShot(false);
     connect(timer, SIGNAL(timeout()), this, SLOT(timerTimeout()));
     timer->start(1000);
+
 }
 
 MainWindow::~MainWindow()
@@ -37,6 +43,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::timerTimeout()
 {
+    qDebug() << "Updating image";
     if(mapFragment)
     {
         this->ui->output->setMap(mapFragment->image);
@@ -44,5 +51,7 @@ void MainWindow::timerTimeout()
 
     Message message;
     colorMapOverlay->processData(message);
+    pathOverlay->processData(message);
     this->ui->output->updateOverlay(colorMapOverlay->toImage());
+    this->ui->output->updatePath(pathOverlay->toImage());
 }
