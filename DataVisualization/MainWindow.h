@@ -10,6 +10,7 @@
 #include <MapImageManipulation/FileMapProvider.h>
 #include <MapImageManipulation/MapFragment.h>
 #include <MapImageManipulation/ColorMapOverlay.h>
+#include <WebSocketServer/WebSocketServer.h>
 
 namespace Ui {
 class MainWindow;
@@ -23,6 +24,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    WebSocketServer* getServer();
+
 private:
     Ui::MainWindow *ui;
     QTimer *timer;
@@ -30,6 +33,7 @@ private:
     QSharedPointer<MapFragment> mapFragment;
     MapOverlay *colorMapOverlay;
     MapOverlay *pathOverlay;
+    WebSocketServer *webSocketServer;
 
 private slots:
     void timerTimeout();

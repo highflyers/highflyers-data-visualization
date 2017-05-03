@@ -34,11 +34,24 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(timer, SIGNAL(timeout()), this, SLOT(timerTimeout()));
     timer->start(1000);
 
+    bool debug = true;//parser.isSet(dbgOption);
+    quint16 port = 1;
+    webSocketServer = new WebSocketServer(debug, port);
+
+    connect(webSocketServer, SIGNAL(newWebMessage(Message)), colorMapOverlay, SLOT(processData(Message)));
 }
 
 MainWindow::~MainWindow()
 {
+    delete webSocketServer;
+    delete colorMapOverlay;
+    delete pathOverlay;
     delete ui;
+}
+
+WebSocketServer *MainWindow::getServer()
+{
+    return this->webSocketServer;
 }
 
 void MainWindow::timerTimeout()
