@@ -7,6 +7,7 @@
 #include <QtWebSockets/QWebSocketServer>
 #include <QtWebSockets/QWebSocket>
 #include <Message.h>
+#include <QJsonObject>
 
 
 class WebSocketServer : public QObject
@@ -30,6 +31,8 @@ private:
     QWebSocketServer *m_pWebSocketServer;
     QList<QWebSocket *> m_clients;
     bool m_debug;
+
+    QJsonObject objectFromString(const QString &m);
 };
 
 #endif // WEBSOCKETSERVER_H

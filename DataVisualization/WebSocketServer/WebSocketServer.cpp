@@ -2,6 +2,10 @@
 #include "QtWebSockets/qwebsocketserver.h"
 #include "QtWebSockets/qwebsocket.h"
 #include <QDebug>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QJsonValue>
+#include <QJsonArray>
 
 QT_USE_NAMESPACE
 
@@ -51,6 +55,37 @@ void WebSocketServer::processTextMessage(QString message)
         pClient->sendTextMessage(message);
     }
     Message *msg = new Message();
+    QString m = "{ \"ID\" : 2, \"name\" : \"samolot\", \"latitude\" : 20.56, \"longitude\" : 56.78, \"altitude\" : 56.87, \"data\" : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]} ";
+    QJsonObject object = objectFromString(m);
+    msg->ID = object["ID"].toDouble();
+    qDebug() << "ID: " << msg->ID;
+    msg->name = object["name"].toString();
+    qDebug() << "Name: " << msg->name;
+
+    msg->position.setLatitude(object["latitude"].toDouble());
+    msg->position.setLongitude(object["longitude"].toDouble());
+    msg->position.setAltitude(object["altitude"].toDouble());
+
+    qDebug() << "Latitude: " << msg->position.latitude();
+    qDebug() << "Longitude: " << msg->position.longitude();
+    qDebug() << "Altitude: " << msg->position.altitude();
+
+    QJsonArray data = object["data"].toArray();
+    auto dataIt = msg->data.begin();
+    qDebug() << "Data: ";
+    for(auto it = data.begin(); it != data.end(); ++it){
+        if(dataIt != msg->data.end()){
+            QJsonValue temp = *it;
+            *dataIt = temp.toInt();
+            qDebug() << *dataIt;
+            ++dataIt;
+        } else {
+            break;
+        }
+    }
+
+    qDebug() << "Data: " << data;
+
     emit newWebMessage(*msg);
     delete msg;
 }
@@ -76,4 +111,30 @@ void WebSocketServer::socketDisconnected()
         m_clients.removeAll(pClient);
         pClient->deleteLater();
     }
+}
+
+QJsonObject WebSocketServer::objectFromString(const QString &m)
+{
+    QJsonObject obj;
+
+    QJsonDocument doc = QJsonDocument::fromJson(m.toUtf8());
+
+      // check validity of the document
+      if(!doc.isNull())
+      {
+          if(doc.isObject())
+          {
+              obj = doc.object();
+          }
+          else
+          {
+              qDebug() << "Document is not an object" << endl;
+          }
+      }
+      else
+      {
+          qDebug() << "Invalid JSON...\n" << m << endl;
+      }
+
+      return obj;
 }
