@@ -12,7 +12,7 @@ class Message : public QObject
     Q_OBJECT
 
 private:
-    static const unsigned MESSAGE_DATA_SIZE = 16;
+    const unsigned MESSAGE_DATA_SIZE = 16;
 
 public:
     explicit Message(QObject *parent = 0);
@@ -20,7 +20,7 @@ public:
     int ID;
     QString name;
     QGeoCoordinate position;
-    int data[MESSAGE_DATA_SIZE];
+    std::vector<int> data;
 
     QString toString();
 };

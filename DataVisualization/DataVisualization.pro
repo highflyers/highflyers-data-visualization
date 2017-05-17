@@ -3,7 +3,7 @@
 # Project created by QtCreator 2017-04-19T18:41:25
 #
 #-------------------------------------------------
-
+QT += core websockets
 QT       += core gui
 
 CONFIG += c++11
@@ -27,7 +27,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp\
         MainWindow.cpp \
-    qcustomplot.cpp \
     MapWidget.cpp \
     Message.cpp \
     GUI/ServerStatus.cpp \
@@ -38,10 +37,11 @@ SOURCES += main.cpp\
     MapImageManipulation/FileMapProvider.cpp \
     MapImageManipulation/ImageMixer.cpp \
     MapImageManipulation/MapProvider.cpp \
-    MapImageManipulation/PathOverlay.cpp
+    MapImageManipulation/PathOverlay.cpp \
+    WebSocketServer/WebSocketServer.cpp \
+    qcustomplot.cpp
 
 HEADERS  += MainWindow.h \
-    qcustomplot.h \
     MapWidget.h \
     Message.h \
     GUI/ServerStatus.h \
@@ -55,7 +55,9 @@ HEADERS  += MainWindow.h \
     MapImageManipulation/MapFragment.h \
     MapImageManipulation/MapOverlay.h \
     MapImageManipulation/MapProvider.h \
-    MapImageManipulation/PathOverlay.h
+    MapImageManipulation/PathOverlay.h \
+    WebSocketServer/WebSocketServer.h \
+    qcustomplot.h
 
 FORMS    += MainWindow.ui \
     GUI/ServerStatus.ui \
