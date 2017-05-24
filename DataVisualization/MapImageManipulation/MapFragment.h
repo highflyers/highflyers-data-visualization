@@ -13,7 +13,7 @@ class MapFragment : public QObject
 {
     Q_OBJECT
 public:
-    QPair<QGeoCoordinate, QGeoCoordinate> limits();
+    QPair<QGeoCoordinate, QGeoCoordinate> limits;
     QImage image;
 };
 

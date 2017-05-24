@@ -2,39 +2,48 @@
 #include "QDebug"
 
 #include <QPainter>
+#include <QMessageLogger>
 
-MapWidget::MapWidget(QWidget *parent) : QWidget(parent)
+MapWidget::MapWidget(QWidget *parent) : QLabel(parent)
 {
-    label = new QLabel(this);
-    label->setScaledContents(true);
+    this->setScaledContents(true);
+    // TODO: remove when map begins to provide real data
+    this->mapLimits.first = QGeoCoordinate(1,1,0);
+    this->mapLimits.second = QGeoCoordinate(2,2,0);
 }
 
 void MapWidget::resizeEvent(QResizeEvent *event)
 {
-    qDebug() << "ResizeEvent" << event->size().width();
+    qDebug() << event->size().width();
     this->w = event->size().width();
     this->h = event->size().height();
-    label->setMinimumHeight(h);
-    label->setMaximumHeight(h);
-    label->setMinimumWidth(w);
-    label->setMaximumWidth(w);
-    QWidget::resizeEvent(event);
+    QLabel::resizeEvent(event);
 }
 
 void MapWidget::updateOverlay(const QImage &overlay)
 {
+    qDebug();
     this->overlay = overlay;
     redrawContents();
 }
 
 void MapWidget::updatePath(const QImage &path)
 {
+    qDebug();
     this->path = path;
     redrawContents();
 }
 
+void MapWidget::updateImage(const MapFragment &map)
+{
+    this->setPixmap(QPixmap::fromImage(map.image));
+    this->mapLimits = map.limits;
+}
+
 void MapWidget::redrawContents()
 {
+    if(!path.isNull() && !overlay.isNull()){
+    qDebug();
     QPainter::CompositionMode mode = QPainter::CompositionMode_Multiply;
 
     QImage resultImage = QImage(w, h, QImage::Format_ARGB32_Premultiplied);
@@ -51,7 +60,25 @@ void MapWidget::redrawContents()
     painter.fillRect(resultImage.rect(), Qt::white);
     painter.end();
 
-    this->label->setPixmap(QPixmap::fromImage(resultImage));
+    this->setPixmap(QPixmap::fromImage(resultImage));
+    }
+}
+
+QGeoCoordinate MapWidget::relativeToAbsolute(double x, double y)
+{
+    double absX = mapLimits.first.longitude() + x * (mapLimits.second.longitude() - mapLimits.first.longitude());
+    double absY = mapLimits.first.latitude() + y * (mapLimits.second.latitude() - mapLimits.first.latitude());
+    QGeoCoordinate ret(absX, absY, 0);
+    qDebug() << "Relative position = (" << x << y << ") -> absolute position = " << ret.toString();
+    return ret;
+}
+
+void MapWidget::mousePressEvent(QMouseEvent *event)
+{
+    qDebug() << "Clicked in point: " << event->pos() << "widget size is " << width() << "x" << height();
+    double relX = (double)event->pos().x() / (double)width();
+    double relY = (double)event->pos().y() / (double)height();
+    emit pointSelected(relativeToAbsolute(relX, relY));
 }
 
 int MapWidget::height() const
@@ -62,11 +89,6 @@ int MapWidget::height() const
 int MapWidget::width() const
 {
     return w;
-}
-
-void MapWidget::setPixmap(const QPixmap &pixmap)
-{
-    this->label->setPixmap(pixmap);
 }
 
 void MapWidget::setMap(const QImage &newMapImage)
