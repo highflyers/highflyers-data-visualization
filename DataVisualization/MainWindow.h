@@ -31,9 +31,8 @@ private:
     Ui::MainWindow *ui;
     QTimer *timer;
     MapProvider *mapProvider;
-    QSharedPointer<MapFragment> mapFragment;
-    MapOverlay *colorMapOverlay;
-    MapOverlay *pathOverlay;
+    DisplayImage *mapFragment;
+    DisplayImage *mapImage;
     WebSocketServer *webSocketServer;
 
 private slots:

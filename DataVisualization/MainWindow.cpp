@@ -22,12 +22,14 @@ MainWindow::MainWindow(QWidget *parent) :
     /// @todo Add config file
     mapProvider = new FileMapProvider(mapFilename, "");
     /// @todo Set coordinates
-    QGeoCoordinate coord;
-    QPair<QGeoCoordinate, QGeoCoordinate> coordPair(coord, coord);
+    QGeoCoordinate first = QGeoCoordinate(1,1,0);
+    QGeoCoordinate second = QGeoCoordinate(2,2,0);
+    QPair<QGeoCoordinate, QGeoCoordinate> coordPair(first, second);
     mapFragment = mapProvider->getImage(coordPair);
 
-    colorMapOverlay = new ColorMapOverlay(mapFragment->image.width(), mapFragment->image.height(), this);
-    pathOverlay = new PathOverlay(mapFragment->image.width(), mapFragment->image.height(), this);
+    qDebug() << mapFragment->limits().first.toString();
+
+    mapImage = new PathOverlay(new ColorMapOverlay(mapFragment));
 
     timer = new QTimer(this);
     timer->setSingleShot(false);
@@ -38,15 +40,16 @@ MainWindow::MainWindow(QWidget *parent) :
     quint16 port = 1;
     webSocketServer = new WebSocketServer(debug, port);
 
-    connect(webSocketServer, SIGNAL(newWebMessage(Message)), colorMapOverlay, SLOT(processData(Message)));
+    connect(webSocketServer, SIGNAL(newWebMessage(Message)), mapImage, SLOT(processData(Message)));
     connect(this->ui->output, SIGNAL(pointSelected(QGeoCoordinate)), this->ui->widget_coord, SLOT(update(QGeoCoordinate)));
 }
 
 MainWindow::~MainWindow()
 {
     delete webSocketServer;
-    delete colorMapOverlay;
-    delete pathOverlay;
+    delete mapProvider;
+    delete mapFragment;
+    delete mapImage;
     delete ui;
 }
 
@@ -57,20 +60,8 @@ WebSocketServer *MainWindow::getServer()
 
 void MainWindow::timerTimeout()
 {
-    qDebug();
-    if(mapFragment)
-    {
-        qDebug() << "mapFragment is preset";
-        this->ui->output->setMap(mapFragment->image);
-    }
-    else
-    {
-        qDebug() << "mapFragment is not preset";
-    }
-
+    qDebug() << mapImage->limits().first.toString();
     Message message;
-    colorMapOverlay->processData(message);
-    pathOverlay->processData(message);
-    this->ui->output->updateOverlay(colorMapOverlay->toImage());
-    this->ui->output->updatePath(pathOverlay->toImage());
+    mapImage->processData(message);
+    this->ui->output->updateImage(mapImage);
 }

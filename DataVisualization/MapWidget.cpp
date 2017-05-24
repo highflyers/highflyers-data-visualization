@@ -7,9 +7,6 @@
 MapWidget::MapWidget(QWidget *parent) : QLabel(parent)
 {
     this->setScaledContents(true);
-    // TODO: remove when map begins to provide real data
-    this->mapLimits.first = QGeoCoordinate(1,1,0);
-    this->mapLimits.second = QGeoCoordinate(2,2,0);
 }
 
 void MapWidget::resizeEvent(QResizeEvent *event)
@@ -20,48 +17,17 @@ void MapWidget::resizeEvent(QResizeEvent *event)
     QLabel::resizeEvent(event);
 }
 
-void MapWidget::updateOverlay(const QImage &overlay)
+void MapWidget::updateImage(const DisplayImage *displayImage)
 {
-    qDebug();
-    this->overlay = overlay;
-    redrawContents();
+    qDebug() << displayImage->limits().first.toString();
+    updateImage(displayImage->image);
+    this->mapLimits = displayImage->limits();
 }
 
-void MapWidget::updatePath(const QImage &path)
+void MapWidget::updateImage(const QImage &displayImage)
 {
     qDebug();
-    this->path = path;
-    redrawContents();
-}
-
-void MapWidget::updateImage(const MapFragment &map)
-{
-    this->setPixmap(QPixmap::fromImage(map.image));
-    this->mapLimits = map.limits;
-}
-
-void MapWidget::redrawContents()
-{
-    if(!path.isNull() && !overlay.isNull()){
-    qDebug();
-    QPainter::CompositionMode mode = QPainter::CompositionMode_Multiply;
-
-    QImage resultImage = QImage(w, h, QImage::Format_ARGB32_Premultiplied);
-    QPainter painter(&resultImage);
-    painter.setCompositionMode(QPainter::CompositionMode_Source);
-    painter.fillRect(resultImage.rect(), Qt::transparent);
-    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    painter.drawImage(0, 0, overlay.scaled(w, h));
-    painter.setCompositionMode(mode);
-    painter.drawImage(0, 0, path.scaled(w, h));
-    painter.setCompositionMode(mode);
-    painter.drawImage(0, 0, (*mapImage).scaled(w, h));
-    painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
-    painter.fillRect(resultImage.rect(), Qt::white);
-    painter.end();
-
-    this->setPixmap(QPixmap::fromImage(resultImage));
-    }
+    this->setPixmap(QPixmap::fromImage(displayImage.scaled(w, h)));
 }
 
 QGeoCoordinate MapWidget::relativeToAbsolute(double x, double y)
@@ -89,10 +55,4 @@ int MapWidget::height() const
 int MapWidget::width() const
 {
     return w;
-}
-
-void MapWidget::setMap(const QImage &newMapImage)
-{
-    if(mapImage != nullptr) delete mapImage;
-    this->mapImage = new QImage(newMapImage);
 }

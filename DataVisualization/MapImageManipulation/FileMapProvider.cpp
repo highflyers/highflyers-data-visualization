@@ -1,4 +1,5 @@
 #include "FileMapProvider.h"
+#include <QDebug>
 
 FileMapProvider::FileMapProvider(const QString &imageFile, const QString &descriptionFile, QObject *parent) : MapProvider(parent)
 {
@@ -10,9 +11,11 @@ FileMapProvider::~FileMapProvider()
     delete mapImagePixmap;
 }
 
-QSharedPointer<MapFragment> FileMapProvider::getImage(QPair<QGeoCoordinate, QGeoCoordinate> limits)
+MapFragment* FileMapProvider::getImage(QPair<QGeoCoordinate, QGeoCoordinate> limits)
 {
     MapFragment *fragment = new MapFragment();
     fragment->image = mapImagePixmap->toImage();
-    return QSharedPointer<MapFragment>(fragment);
+    fragment->m_limits = limits;
+    qDebug() << fragment->limits().first.toString() << fragment->limits().second.toString();
+    return fragment;
 }

@@ -20,7 +20,7 @@ public:
 
     ~FileMapProvider();
 
-    QSharedPointer<MapFragment> getImage(QPair<QGeoCoordinate, QGeoCoordinate> limits);
+    MapFragment *getImage(QPair<QGeoCoordinate, QGeoCoordinate> limits);
 
 private:
     QPixmap *mapImagePixmap;

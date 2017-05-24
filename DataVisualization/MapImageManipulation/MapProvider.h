@@ -18,7 +18,7 @@ class MapProvider : public QObject
 {
     Q_OBJECT
 public:
-    explicit MapProvider(QObject *parent = 0);
+    explicit MapProvider(QObject *parent = 0) : QObject(parent) {}
     virtual ~MapProvider() {}
 
     /**
@@ -27,7 +27,7 @@ public:
      * @note Returned map can cover an area larger than the one constrained by limits
      * @todo Verify this idea
      */
-    virtual QSharedPointer<MapFragment> getImage(QPair<QGeoCoordinate, QGeoCoordinate> limits) = 0;
+    virtual MapFragment *getImage(QPair<QGeoCoordinate, QGeoCoordinate> limits) = 0;
 
 signals:
 
