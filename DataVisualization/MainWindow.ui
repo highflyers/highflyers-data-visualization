@@ -60,16 +60,6 @@
        </property>
        <item>
         <layout class="QGridLayout" name="statusLayout">
-         <item row="1" column="0">
-          <widget class="TimeStatus" name="widget_time" native="true">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-          </widget>
-         </item>
          <item row="2" column="0">
           <widget class="VehicleWidget" name="widget_vehicles" native="true"/>
          </item>
@@ -102,6 +92,19 @@
            </property>
           </spacer>
          </item>
+         <item row="1" column="0">
+          <widget class="TimeStatus" name="widget_time" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="CoordinateDisplay" name="widget_coord" native="true"/>
+         </item>
         </layout>
        </item>
       </layout>
@@ -115,7 +118,7 @@
      <x>0</x>
      <y>0</y>
      <width>1099</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>
@@ -153,6 +156,12 @@
    <class>VehicleWidget</class>
    <extends>QWidget</extends>
    <header>GUI/VehicleWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CoordinateDisplay</class>
+   <extends>QWidget</extends>
+   <header>GUI/CoordinateDisplay.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -39,7 +39,8 @@ SOURCES += main.cpp\
     MapImageManipulation/MapProvider.cpp \
     MapImageManipulation/PathOverlay.cpp \
     WebSocketServer/WebSocketServer.cpp \
-    qcustomplot.cpp
+    qcustomplot.cpp \
+    GUI/CoordinateDisplay.cpp
 
 HEADERS  += MainWindow.h \
     MapWidget.h \
@@ -57,10 +58,12 @@ HEADERS  += MainWindow.h \
     MapImageManipulation/MapProvider.h \
     MapImageManipulation/PathOverlay.h \
     WebSocketServer/WebSocketServer.h \
-    qcustomplot.h
+    qcustomplot.h \
+    GUI/CoordinateDisplay.h
 
 FORMS    += MainWindow.ui \
     GUI/ServerStatus.ui \
     GUI/TimeStatus.ui \
     GUI/VehicleWidget.ui \
-    GUI/VehicleContainer.ui
+    GUI/VehicleContainer.ui \
+    GUI/CoordinateDisplay.ui

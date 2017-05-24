@@ -32,13 +32,14 @@ MainWindow::MainWindow(QWidget *parent) :
     timer = new QTimer(this);
     timer->setSingleShot(false);
     connect(timer, SIGNAL(timeout()), this, SLOT(timerTimeout()));
-    timer->start(1000);
+    timer->start(TIMER_RATE);
 
     bool debug = true;//parser.isSet(dbgOption);
     quint16 port = 1;
     webSocketServer = new WebSocketServer(debug, port);
 
     connect(webSocketServer, SIGNAL(newWebMessage(Message)), colorMapOverlay, SLOT(processData(Message)));
+    connect(this->ui->output, SIGNAL(pointSelected(QGeoCoordinate)), this->ui->widget_coord, SLOT(update(QGeoCoordinate)));
 }
 
 MainWindow::~MainWindow()
@@ -56,10 +57,15 @@ WebSocketServer *MainWindow::getServer()
 
 void MainWindow::timerTimeout()
 {
-    qDebug() << "Updating image";
+    qDebug();
     if(mapFragment)
     {
+        qDebug() << "mapFragment is preset";
         this->ui->output->setMap(mapFragment->image);
+    }
+    else
+    {
+        qDebug() << "mapFragment is not preset";
     }
 
     Message message;
