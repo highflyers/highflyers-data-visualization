@@ -20,6 +20,11 @@ PathOverlay::~PathOverlay()
     delete parentImage;
 }
 
+QPair<QGeoCoordinate, QGeoCoordinate> PathOverlay::limits() const
+{
+    return parentImage->limits();
+}
+
 QImage PathOverlay::toImage()
 {
     QPixmap mapPixmap = customPlot->toPixmap(width, height);

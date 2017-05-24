@@ -27,6 +27,7 @@ public:
     WebSocketServer* getServer();
 
 private:
+    const unsigned TIMER_RATE = 1000;
     Ui::MainWindow *ui;
     QTimer *timer;
     MapProvider *mapProvider;

@@ -17,7 +17,7 @@ TEMPLATE = app
 # any feature of Qt which as been marked as deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
-DEFINES += QT_DEPRECATED_WARNINGS
+# DEFINES += QT_DEPRECATED_WARNINGS
 
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -40,7 +40,8 @@ SOURCES += main.cpp\
     WebSocketServer/WebSocketServer.cpp \
     qcustomplot.cpp \
     MapImageManipulation/DisplayImage.cpp \
-    MapImageManipulation/MapFragment.cpp
+    MapImageManipulation/MapFragment.cpp \
+    GUI/CoordinateDisplay.cpp
 
 HEADERS  += MainWindow.h \
     MapWidget.h \
@@ -55,14 +56,18 @@ HEADERS  += MainWindow.h \
     MapImageManipulation/ImageMixer.h \
     MapImageManipulation/MapFragment.h \
     MapImageManipulation/MapOverlay.h \
-    MapImageManipulation/MapProvider.h \
     MapImageManipulation/PathOverlay.h \
+    MapImageManipulation/MapProvider.h \
     WebSocketServer/WebSocketServer.h \
     qcustomplot.h \
-    MapImageManipulation/DisplayImage.h
+    MapImageManipulation/DisplayImage.h \
+    GUI/CoordinateDisplay.h \
+    MapImageManipulation/MapProvider.h
 
 FORMS    += MainWindow.ui \
     GUI/ServerStatus.ui \
     GUI/TimeStatus.ui \
     GUI/VehicleWidget.ui \
-    GUI/VehicleContainer.ui
+    GUI/VehicleContainer.ui \
+    GUI/CoordinateDisplay.ui
+

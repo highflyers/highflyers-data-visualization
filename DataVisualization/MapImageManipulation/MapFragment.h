@@ -4,15 +4,23 @@
 #include <QObject>
 #include <MapImageManipulation/DisplayImage.h>
 
+class FileMapProvider;
+
 /**
  * @brief Structure containing map image and info
  */
 class MapFragment : public DisplayImage
 {
     Q_OBJECT
+    friend class FileMapProvider;
 public:
     explicit MapFragment(QObject *parent = 0);
+    ~MapFragment(){}
     QImage processData(const Message &message);
+    QPair<QGeoCoordinate, QGeoCoordinate> limits() const;
+
+private:
+    QPair<QGeoCoordinate, QGeoCoordinate> m_limits;
 };
 
 #endif // MAPFRAGMENT_H

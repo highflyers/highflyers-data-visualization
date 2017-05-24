@@ -10,7 +10,7 @@ class PathOverlay : public MapOverlay
 public:
     PathOverlay(DisplayImage *parentImage, QObject *parent = 0);
     ~PathOverlay();
-
+    QPair<QGeoCoordinate, QGeoCoordinate> limits() const;
     QImage toImage();
 
 private:

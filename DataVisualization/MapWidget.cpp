@@ -2,44 +2,49 @@
 #include "QDebug"
 
 #include <QPainter>
+#include <QMessageLogger>
 
-MapWidget::MapWidget(QWidget *parent) : QWidget(parent)
+MapWidget::MapWidget(QWidget *parent) : QLabel(parent)
 {
-    label = new QLabel(this);
-    label->setScaledContents(true);
+    this->setScaledContents(true);
 }
 
 void MapWidget::resizeEvent(QResizeEvent *event)
 {
-    qDebug() << "ResizeEvent" << event->size().width();
+    qDebug() << event->size().width();
     this->w = event->size().width();
     this->h = event->size().height();
-    label->setMinimumHeight(h);
-    label->setMaximumHeight(h);
-    label->setMinimumWidth(w);
-    label->setMaximumWidth(w);
-    QWidget::resizeEvent(event);
+    QLabel::resizeEvent(event);
+}
+
+void MapWidget::updateImage(const DisplayImage *displayImage)
+{
+    qDebug() << displayImage->limits().first.toString();
+    updateImage(displayImage->image);
+    this->mapLimits = displayImage->limits();
 }
 
 void MapWidget::updateImage(const QImage &displayImage)
 {
-    this->displayImage = displayImage;
-    redrawContents();
+    qDebug();
+    this->setPixmap(QPixmap::fromImage(displayImage.scaled(w, h)));
 }
 
-void MapWidget::redrawContents()
+QGeoCoordinate MapWidget::relativeToAbsolute(double x, double y)
 {
-    QImage resultImage = QImage(w, h, QImage::Format_ARGB32_Premultiplied);
-    QPainter painter(&resultImage);
-    painter.setCompositionMode(QPainter::CompositionMode_Source);
-    painter.fillRect(resultImage.rect(), Qt::transparent);
-    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    painter.drawImage(0, 0, displayImage.scaled(w, h));
-    painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
-    painter.fillRect(resultImage.rect(), Qt::white);
-    painter.end();
+    double absX = mapLimits.first.longitude() + x * (mapLimits.second.longitude() - mapLimits.first.longitude());
+    double absY = mapLimits.first.latitude() + y * (mapLimits.second.latitude() - mapLimits.first.latitude());
+    QGeoCoordinate ret(absX, absY, 0);
+    qDebug() << "Relative position = (" << x << y << ") -> absolute position = " << ret.toString();
+    return ret;
+}
 
-    this->label->setPixmap(QPixmap::fromImage(resultImage));
+void MapWidget::mousePressEvent(QMouseEvent *event)
+{
+    qDebug() << "Clicked in point: " << event->pos() << "widget size is " << width() << "x" << height();
+    double relX = (double)event->pos().x() / (double)width();
+    double relY = (double)event->pos().y() / (double)height();
+    emit pointSelected(relativeToAbsolute(relX, relY));
 }
 
 int MapWidget::height() const
@@ -50,9 +55,4 @@ int MapWidget::height() const
 int MapWidget::width() const
 {
     return w;
-}
-
-void MapWidget::setPixmap(const QPixmap &pixmap)
-{
-    this->label->setPixmap(pixmap);
 }

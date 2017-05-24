@@ -16,6 +16,8 @@ public:
     ColorMapOverlay(DisplayImage *parentImage, QObject *parent = 0);
     ~ColorMapOverlay();
 
+    QPair<QGeoCoordinate, QGeoCoordinate> limits() const;
+
     QImage toImage();
 
 private:

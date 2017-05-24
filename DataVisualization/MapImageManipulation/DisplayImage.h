@@ -12,8 +12,9 @@ class DisplayImage : public QObject
     Q_OBJECT
 public:
     explicit DisplayImage(QObject *parent = 0);
+    virtual ~DisplayImage(){}
 
-    QPair<QGeoCoordinate, QGeoCoordinate> limits();
+    virtual QPair<QGeoCoordinate, QGeoCoordinate> limits() const = 0;
     QImage image;
 
     double getWidth();

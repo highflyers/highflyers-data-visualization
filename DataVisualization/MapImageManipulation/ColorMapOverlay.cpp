@@ -31,6 +31,11 @@ ColorMapOverlay::~ColorMapOverlay()
     delete parentImage;
 }
 
+QPair<QGeoCoordinate, QGeoCoordinate> ColorMapOverlay::limits() const
+{
+    return parentImage->limits();
+}
+
 QImage ColorMapOverlay::toImage()
 {
     QPixmap mapPixmap = customPlot->toPixmap(width, height);

@@ -22,22 +22,26 @@ MainWindow::MainWindow(QWidget *parent) :
     /// @todo Add config file
     mapProvider = new FileMapProvider(mapFilename, "");
     /// @todo Set coordinates
-    QGeoCoordinate coord;
-    QPair<QGeoCoordinate, QGeoCoordinate> coordPair(coord, coord);
+    QGeoCoordinate first = QGeoCoordinate(1,1,0);
+    QGeoCoordinate second = QGeoCoordinate(2,2,0);
+    QPair<QGeoCoordinate, QGeoCoordinate> coordPair(first, second);
     mapFragment = mapProvider->getImage(coordPair);
+
+    qDebug() << mapFragment->limits().first.toString();
 
     mapImage = new PathOverlay(new ColorMapOverlay(mapFragment));
 
     timer = new QTimer(this);
     timer->setSingleShot(false);
     connect(timer, SIGNAL(timeout()), this, SLOT(timerTimeout()));
-    timer->start(1000);
+    timer->start(TIMER_RATE);
 
     bool debug = true;//parser.isSet(dbgOption);
     quint16 port = 1;
     webSocketServer = new WebSocketServer(debug, port);
 
     connect(webSocketServer, SIGNAL(newWebMessage(Message)), mapImage, SLOT(processData(Message)));
+    connect(this->ui->output, SIGNAL(pointSelected(QGeoCoordinate)), this->ui->widget_coord, SLOT(update(QGeoCoordinate)));
 }
 
 MainWindow::~MainWindow()
@@ -56,9 +60,8 @@ WebSocketServer *MainWindow::getServer()
 
 void MainWindow::timerTimeout()
 {
-    qDebug() << "Updating image";
-
+    qDebug() << mapImage->limits().first.toString();
     Message message;
     mapImage->processData(message);
-    this->ui->output->updateImage(mapImage->image);
+    this->ui->output->updateImage(mapImage);
 }

@@ -1,4 +1,5 @@
 #include "FileMapProvider.h"
+#include <QDebug>
 
 FileMapProvider::FileMapProvider(const QString &imageFile, const QString &descriptionFile, QObject *parent) : MapProvider(parent)
 {
@@ -14,5 +15,7 @@ MapFragment* FileMapProvider::getImage(QPair<QGeoCoordinate, QGeoCoordinate> lim
 {
     MapFragment *fragment = new MapFragment();
     fragment->image = mapImagePixmap->toImage();
+    fragment->m_limits = limits;
+    qDebug() << fragment->limits().first.toString() << fragment->limits().second.toString();
     return fragment;
 }
