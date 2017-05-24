@@ -8,11 +8,13 @@ class PathOverlay : public MapOverlay
 {
     Q_OBJECT
 public:
-    PathOverlay(unsigned width, unsigned height, QObject *parent = 0);
+    PathOverlay(DisplayImage *parentImage, QObject *parent = 0);
+    ~PathOverlay();
 
     QImage toImage();
 
 private:
+    DisplayImage *parentImage;
     unsigned width, height;
     QCustomPlot *customPlot;
     QCPCurve *pathCurve;
@@ -20,7 +22,7 @@ private:
 signals:
 
 public slots:
-    void processData(const Message &message);
+    QImage processData(const Message &message);
 };
 
 #endif // PATHOVERLAY_H

@@ -4,19 +4,22 @@
 #include <QObject>
 
 #include <MapImageManipulation/MapOverlay.h>
+#include <MapImageManipulation/DisplayImage.h>
 #include <qcustomplot.h>
+#include <MapImageManipulation/MapOverlay.h>
 
 class ColorMapOverlay : public MapOverlay
 {
     Q_OBJECT
 public:
     explicit ColorMapOverlay(QObject *parent = 0);
-    ColorMapOverlay(unsigned width, unsigned height, QObject *parent = 0);
+    ColorMapOverlay(DisplayImage *parentImage, QObject *parent = 0);
     ~ColorMapOverlay();
 
     QImage toImage();
 
 private:
+    DisplayImage *parentImage;
     QCustomPlot *customPlot;
     QCPColorMap *colorMap;
     QCPColorScale *colorScale;
@@ -26,7 +29,7 @@ private:
 signals:
 
 public slots:
-    void processData(const Message &message);
+    QImage processData(const Message &message);
 
 };
 

@@ -36,10 +36,11 @@ SOURCES += main.cpp\
     MapImageManipulation/ColorMapOverlay.cpp \
     MapImageManipulation/FileMapProvider.cpp \
     MapImageManipulation/ImageMixer.cpp \
-    MapImageManipulation/MapProvider.cpp \
     MapImageManipulation/PathOverlay.cpp \
     WebSocketServer/WebSocketServer.cpp \
-    qcustomplot.cpp
+    qcustomplot.cpp \
+    MapImageManipulation/DisplayImage.cpp \
+    MapImageManipulation/MapFragment.cpp
 
 HEADERS  += MainWindow.h \
     MapWidget.h \
@@ -57,7 +58,8 @@ HEADERS  += MainWindow.h \
     MapImageManipulation/MapProvider.h \
     MapImageManipulation/PathOverlay.h \
     WebSocketServer/WebSocketServer.h \
-    qcustomplot.h
+    qcustomplot.h \
+    MapImageManipulation/DisplayImage.h
 
 FORMS    += MainWindow.ui \
     GUI/ServerStatus.ui \

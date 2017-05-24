@@ -2,19 +2,18 @@
 #define MAPFRAGMENT_H
 
 #include <QObject>
-#include <QPair>
-#include <QtPositioning/QGeoCoordinate>
-#include <QImage>
+#include <MapImageManipulation/DisplayImage.h>
 
 /**
  * @brief Structure containing map image and info
  */
-class MapFragment : public QObject
+class MapFragment : public DisplayImage
 {
     Q_OBJECT
 public:
-    QPair<QGeoCoordinate, QGeoCoordinate> limits();
-    QImage image;
+    explicit MapFragment(QObject *parent = 0);
+    QImage processData(const Message &message);
 };
 
 #endif // MAPFRAGMENT_H
+

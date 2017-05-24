@@ -26,8 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QPair<QGeoCoordinate, QGeoCoordinate> coordPair(coord, coord);
     mapFragment = mapProvider->getImage(coordPair);
 
-    colorMapOverlay = new ColorMapOverlay(mapFragment->image.width(), mapFragment->image.height(), this);
-    pathOverlay = new PathOverlay(mapFragment->image.width(), mapFragment->image.height(), this);
+    mapImage = new PathOverlay(new ColorMapOverlay(mapFragment));
 
     timer = new QTimer(this);
     timer->setSingleShot(false);
@@ -38,14 +37,15 @@ MainWindow::MainWindow(QWidget *parent) :
     quint16 port = 1;
     webSocketServer = new WebSocketServer(debug, port);
 
-    connect(webSocketServer, SIGNAL(newWebMessage(Message)), colorMapOverlay, SLOT(processData(Message)));
+    connect(webSocketServer, SIGNAL(newWebMessage(Message)), mapImage, SLOT(processData(Message)));
 }
 
 MainWindow::~MainWindow()
 {
     delete webSocketServer;
-    delete colorMapOverlay;
-    delete pathOverlay;
+    delete mapProvider;
+    delete mapFragment;
+    delete mapImage;
     delete ui;
 }
 
@@ -57,14 +57,8 @@ WebSocketServer *MainWindow::getServer()
 void MainWindow::timerTimeout()
 {
     qDebug() << "Updating image";
-    if(mapFragment)
-    {
-        this->ui->output->setMap(mapFragment->image);
-    }
 
     Message message;
-    colorMapOverlay->processData(message);
-    pathOverlay->processData(message);
-    this->ui->output->updateOverlay(colorMapOverlay->toImage());
-    this->ui->output->updatePath(pathOverlay->toImage());
+    mapImage->processData(message);
+    this->ui->output->updateImage(mapImage->image);
 }

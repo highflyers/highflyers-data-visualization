@@ -21,22 +21,18 @@ public:
 
     void setPixmap(const QPixmap &pixmap);
 
-    void setMap(const QImage &newMapImage);
-
     void resizeEvent(QResizeEvent *event);
 
 signals:
 
 public slots:
-    void updateOverlay(const QImage &overlay);
-    void updatePath(const QImage &path);
+    void updateImage(const QImage &displayImage);
 
 private:
     QLabel *label;
     int h, w;
     QPixmap *mapImagePixmap = nullptr;
-    QImage *mapImage = nullptr;
-    QImage overlay, path;
+    QImage displayImage;
     void redrawContents();
 };
 

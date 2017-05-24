@@ -1,17 +1,17 @@
 #include "ColorMapOverlay.h"
 
-ColorMapOverlay::ColorMapOverlay(QObject *parent) : ColorMapOverlay(1, 1, parent)
+ColorMapOverlay::ColorMapOverlay(QObject *parent) : MapOverlay(parent)
 {
 }
 
-ColorMapOverlay::ColorMapOverlay(unsigned width, unsigned height, QObject *parent) : MapOverlay(parent), width(width), height(height)
+ColorMapOverlay::ColorMapOverlay(DisplayImage *parentImage, QObject* parent) : MapOverlay(parent), parentImage(parentImage)
 {
     customPlot = new QCustomPlot();
     customPlot->axisRect()->setAutoMargins(QCP::msNone);
     customPlot->axisRect()->setMargins(QMargins(0,0,0,0));
 
     colorMap = new QCPColorMap(customPlot->xAxis, customPlot->yAxis);
-    colorMap->data()->setSize(width, height);
+    colorMap->data()->setSize(parentImage->getWidth(), parentImage->getHeight());
     colorMap->data()->setRange(QCPRange(0, 8), QCPRange(0, 8));
 
     colorScale = new QCPColorScale(customPlot);
@@ -25,6 +25,10 @@ ColorMapOverlay::ColorMapOverlay(unsigned width, unsigned height, QObject *paren
 ColorMapOverlay::~ColorMapOverlay()
 {
     delete customPlot;
+    delete colorMap;
+    delete colorScale;
+    delete marginGroup;
+    delete parentImage;
 }
 
 QImage ColorMapOverlay::toImage()
@@ -33,9 +37,12 @@ QImage ColorMapOverlay::toImage()
     return mapPixmap.toImage();
 }
 
-void ColorMapOverlay::processData(const Message &message)
+QImage ColorMapOverlay::processData(const Message &message)
 {
     /// @todo Implement operations
+    image = parentImage->processData(message);
+    width = image.width();
+    height = image.height();
     double x, y, z;
     for (unsigned xIndex = 0; xIndex < width; xIndex += 1)
     {
@@ -49,4 +56,23 @@ void ColorMapOverlay::processData(const Message &message)
         }
     }
     colorMap->rescaleDataRange();
+
+    QImage overlayImage = this->toImage();
+
+    QPainter::CompositionMode mode = QPainter::CompositionMode_Multiply;
+
+    QImage resultImage = QImage(width, height, QImage::Format_ARGB32_Premultiplied);
+    QPainter painter(&resultImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
+    painter.fillRect(resultImage.rect(), Qt::transparent);
+    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    painter.drawImage(0, 0, overlayImage.scaled(width, height));
+    painter.setCompositionMode(mode);
+    painter.drawImage(0, 0, image.scaled(width, height));
+    painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+    painter.fillRect(resultImage.rect(), Qt::white);
+    painter.end();
+
+    image = resultImage;
+    return image;
 }

@@ -5,23 +5,23 @@
 #include <QImage>
 
 #include <Message.h>
+#include <MapImageManipulation/DisplayImage.h>
 
 /**
  * @brief Interface for map overlays
  */
-class MapOverlay : public QObject
+class MapOverlay : public DisplayImage
 {
     Q_OBJECT
 public:
-    explicit MapOverlay(QObject *parent = 0): QObject(parent) {}
+    explicit MapOverlay(QObject *parent = 0) : DisplayImage(parent) {}
     virtual ~MapOverlay() {}
 
     virtual QImage toImage() = 0;
-
 signals:
 
 public slots:
-    virtual void processData(const Message &message) = 0;
+    virtual QImage processData(const Message &message) = 0;
 };
 
 #endif // MAPOVERLAY_H

@@ -21,32 +21,20 @@ void MapWidget::resizeEvent(QResizeEvent *event)
     QWidget::resizeEvent(event);
 }
 
-void MapWidget::updateOverlay(const QImage &overlay)
+void MapWidget::updateImage(const QImage &displayImage)
 {
-    this->overlay = overlay;
-    redrawContents();
-}
-
-void MapWidget::updatePath(const QImage &path)
-{
-    this->path = path;
+    this->displayImage = displayImage;
     redrawContents();
 }
 
 void MapWidget::redrawContents()
 {
-    QPainter::CompositionMode mode = QPainter::CompositionMode_Multiply;
-
     QImage resultImage = QImage(w, h, QImage::Format_ARGB32_Premultiplied);
     QPainter painter(&resultImage);
     painter.setCompositionMode(QPainter::CompositionMode_Source);
     painter.fillRect(resultImage.rect(), Qt::transparent);
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    painter.drawImage(0, 0, overlay.scaled(w, h));
-    painter.setCompositionMode(mode);
-    painter.drawImage(0, 0, path.scaled(w, h));
-    painter.setCompositionMode(mode);
-    painter.drawImage(0, 0, (*mapImage).scaled(w, h));
+    painter.drawImage(0, 0, displayImage.scaled(w, h));
     painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
     painter.fillRect(resultImage.rect(), Qt::white);
     painter.end();
@@ -67,10 +55,4 @@ int MapWidget::width() const
 void MapWidget::setPixmap(const QPixmap &pixmap)
 {
     this->label->setPixmap(pixmap);
-}
-
-void MapWidget::setMap(const QImage &newMapImage)
-{
-    if(mapImage != nullptr) delete mapImage;
-    this->mapImage = new QImage(newMapImage);
 }
