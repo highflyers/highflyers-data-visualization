@@ -14,7 +14,10 @@ void MapWidget::resizeEvent(QResizeEvent *event)
     qDebug() << event->size().width();
     this->w = event->size().width();
     this->h = event->size().height();
-    QLabel::resizeEvent(event);
+    this->setGeometry(this->geometry().x(), this->geometry().y(), w, h);
+    this->setMinimumHeight(10);
+    this->setMinimumWidth(10);
+//    QLabel::resizeEvent(event);
 }
 
 void MapWidget::updateImage(const DisplayImage *displayImage)
