@@ -13,11 +13,16 @@ public:
     QPair<QGeoCoordinate, QGeoCoordinate> limits() const;
     QImage toImage();
 
+    int absoluteLongitudeToRelative(QGeoCoordinate position);
+    int absoluteLatitudeToRelative(QGeoCoordinate position);
+
+
 private:
     DisplayImage *parentImage;
     unsigned width, height;
     QCustomPlot *customPlot;
     QCPCurve *pathCurve;
+    QVector<QCPCurveData> pathData;
 
 signals:
 
