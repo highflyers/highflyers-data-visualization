@@ -35,7 +35,6 @@ SOURCES += main.cpp\
     GUI/VehicleContainer.cpp \
     MapImageManipulation/ColorMapOverlay.cpp \
     MapImageManipulation/FileMapProvider.cpp \
-    MapImageManipulation/ImageMixer.cpp \
     MapImageManipulation/PathOverlay.cpp \
     WebSocketServer/WebSocketServer.cpp \
     qcustomplot.cpp \
@@ -53,7 +52,6 @@ HEADERS  += MainWindow.h \
     GUI/VehicleContainer.h \
     MapImageManipulation/ColorMapOverlay.h \
     MapImageManipulation/FileMapProvider.h \
-    MapImageManipulation/ImageMixer.h \
     MapImageManipulation/MapFragment.h \
     MapImageManipulation/MapOverlay.h \
     MapImageManipulation/PathOverlay.h \
