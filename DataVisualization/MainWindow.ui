@@ -137,7 +137,7 @@
   <customwidget>
    <class>MapWidget</class>
    <extends>QWidget</extends>
-   <header>MapWidget.h</header>
+   <header>GUI/MapWidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

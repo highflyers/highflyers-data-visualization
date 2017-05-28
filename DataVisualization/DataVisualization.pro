@@ -27,7 +27,7 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         MainWindow.cpp \
-    MapWidget.cpp \
+    GUI/MapWidget.cpp \
     Message.cpp \
     GUI/ServerStatus.cpp \
     GUI/TimeStatus.cpp \
@@ -40,10 +40,11 @@ SOURCES += main.cpp\
     qcustomplot.cpp \
     MapImageManipulation/DisplayImage.cpp \
     MapImageManipulation/MapFragment.cpp \
-    GUI/CoordinateDisplay.cpp
+    GUI/CoordinateDisplay.cpp \
+    MissionControl/MissionControl.cpp
 
 HEADERS  += MainWindow.h \
-    MapWidget.h \
+    GUI/MapWidget.h \
     Message.h \
     GUI/ServerStatus.h \
     GUI/TimeStatus.h \
@@ -60,7 +61,8 @@ HEADERS  += MainWindow.h \
     qcustomplot.h \
     MapImageManipulation/DisplayImage.h \
     GUI/CoordinateDisplay.h \
-    MapImageManipulation/MapProvider.h
+    MapImageManipulation/MapProvider.h \
+    MissionControl/MissionControl.h
 
 FORMS    += MainWindow.ui \
     GUI/ServerStatus.ui \

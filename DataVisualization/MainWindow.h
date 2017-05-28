@@ -11,6 +11,7 @@
 #include <MapImageManipulation/MapFragment.h>
 #include <MapImageManipulation/ColorMapOverlay.h>
 #include <WebSocketServer/WebSocketServer.h>
+#include <MissionControl/MissionControl.h>
 
 namespace Ui {
 class MainWindow;
@@ -34,9 +35,13 @@ private:
     DisplayImage *mapFragment;
     DisplayImage *mapImage;
     WebSocketServer *webSocketServer;
+    MissionControl::MissionControl *missionControl;
 
 private slots:
     void timerTimeout();
+
+public slots:
+    void updateImage(DisplayImage *image);
 };
 
 #endif // MAINWINDOW_H
