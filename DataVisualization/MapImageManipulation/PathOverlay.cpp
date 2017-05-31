@@ -64,16 +64,16 @@ QImage PathOverlay::processData(const Message &message)
     int x = 0;
     int y = 0;
 
-    Message mess;
+//    Message mess;
 
-    mess.position.setLongitude(1+(i*0.01));
-    mess.position.setLatitude(1+(i*0.01));
-    i++;
-    qDebug() << "pos long: " << mess.position.longitude();
-    qDebug() << "pos lat: " << mess.position.latitude();
-    if((x = absoluteLongitudeToRelative(mess.position)) != -1){
+//    mess.position.setLongitude(1+(i*0.01));
+//    mess.position.setLatitude(1+(i*0.01));
+//    i++;
+//    qDebug() << "pos long: " << mess.position.longitude();
+//    qDebug() << "pos lat: " << mess.position.latitude();
+    if((x = absoluteLongitudeToRelative(message.position)) != -1){
         qDebug() << "x: " << x;
-        if((y = absoluteLatitudeToRelative(mess.position)) != -1){
+        if((y = absoluteLatitudeToRelative(message.position)) != -1){
             qDebug() << "y: " << y;
             pathData.push_back(QCPCurveData(x, x, y));
             pathCurve->data()->set(pathData, true);
