@@ -43,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
     webSocketServer = new WebSocketServer(debug, port);
 
     connect(webSocketServer, SIGNAL(newWebMessage(Message)), mapImage, SLOT(processData(Message)));
+    connect(webSocketServer, SIGNAL(newWebMessage(Message)), this, SLOT(newMessage(Message)));
     connect(this->ui->output, SIGNAL(pointSelected(QGeoCoordinate)), this->ui->widget_coord, SLOT(update(QGeoCoordinate)));
     connect(missionControl, SIGNAL(newImage(DisplayImage*)), this, SLOT(updateImage(DisplayImage*)));
 }
@@ -66,6 +67,11 @@ void MainWindow::timerTimeout()
     qDebug();
     missionControl->newMessage(Message());
     this->ui->output->updateImage(mapImage);
+}
+
+void MainWindow::newMessage(const Message &message)
+{
+    this->ui->label_message->setText(message.toString());
 }
 
 void MainWindow::updateImage(DisplayImage *image)

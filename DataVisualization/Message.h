@@ -22,7 +22,7 @@ public:
     QGeoCoordinate position;
     std::vector<int> data;
 
-    QString toString();
+    QString toString() const;
 };
 
 #endif // MESSAGE_H

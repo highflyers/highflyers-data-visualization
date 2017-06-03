@@ -55,20 +55,13 @@ void WebSocketServer::processTextMessage(QString message)
         pClient->sendTextMessage(message);
     }
     Message *msg = new Message();
-    QString m = "{ \"ID\" : 2, \"name\" : \"samolot\", \"latitude\" : 20.56, \"longitude\" : 56.78, \"altitude\" : 56.87, \"data\" : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]} ";
-    QJsonObject object = objectFromString(m);
-    msg->ID = object["ID"].toDouble();
-    qDebug() << "ID: " << msg->ID;
+    QJsonObject object = objectFromString(message);
+    msg->ID = object["ID"].toInt();
     msg->name = object["name"].toString();
-    qDebug() << "Name: " << msg->name;
 
     msg->position.setLatitude(object["latitude"].toDouble());
     msg->position.setLongitude(object["longitude"].toDouble());
     msg->position.setAltitude(object["altitude"].toDouble());
-
-    qDebug() << "Latitude: " << msg->position.latitude();
-    qDebug() << "Longitude: " << msg->position.longitude();
-    qDebug() << "Altitude: " << msg->position.altitude();
 
     QJsonArray data = object["data"].toArray();
     auto dataIt = msg->data.begin();
@@ -84,7 +77,7 @@ void WebSocketServer::processTextMessage(QString message)
         }
     }
 
-    qDebug() << "Data: " << data;
+    qDebug() << msg->toString();
 
     emit newWebMessage(*msg);
     delete msg;
