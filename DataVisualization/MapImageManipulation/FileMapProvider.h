@@ -24,6 +24,7 @@ public:
 
 private:
     QPixmap *mapImagePixmap;
+    QPair<QGeoCoordinate, QGeoCoordinate> limits;
 };
 
 #endif // FILEMAPPROVIDER_H
