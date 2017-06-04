@@ -26,9 +26,6 @@ private slots:
     void processBinaryMessage(QByteArray message);
     void socketDisconnected();
 
-    //temporary
-    void timerTimeout();
-
 private:
     QWebSocketServer *m_pWebSocketServer;
     QList<QWebSocket *> m_clients;

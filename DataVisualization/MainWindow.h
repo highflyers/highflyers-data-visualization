@@ -45,6 +45,7 @@ private slots:
 
 public slots:
     void updateImage(DisplayImage *image);
+    void newMessage(const Message &message);
 };
 
 #endif // MAINWINDOW_H

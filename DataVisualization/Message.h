@@ -24,7 +24,7 @@ public:
     QGeoCoordinate position;
     QVector<int> data;
 
-    QString toString();
+    QString toString() const;
 };
 
 #endif // MESSAGE_H

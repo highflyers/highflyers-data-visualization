@@ -25,6 +25,7 @@ public slots:
 private:
     Ui::VehicleContainer *ui;
     QMap<int, VehicleWidget*> vehicles;
+
     /**
      * @brief Creates a VehicleWidget for specified drone
      * A weiget is added to layout
