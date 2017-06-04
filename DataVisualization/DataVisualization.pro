@@ -72,4 +72,3 @@ FORMS    += MainWindow.ui \
     GUI/VehicleWidget.ui \
     GUI/VehicleContainer.ui \
     GUI/CoordinateDisplay.ui
-

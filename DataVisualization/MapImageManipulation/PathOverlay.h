@@ -18,6 +18,10 @@ private:
     unsigned width, height;
     QCustomPlot *customPlot;
     QCPCurve *pathCurve;
+    QVector<QCPCurveData> pathData;
+
+    int absoluteLongitudeToRelative(QGeoCoordinate position);
+    int absoluteLatitudeToRelative(QGeoCoordinate position);
 
 signals:
 

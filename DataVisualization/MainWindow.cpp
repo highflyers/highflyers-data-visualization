@@ -26,15 +26,18 @@ MainWindow::MainWindow(QWidget *parent) :
     /// @todo Add config file
     mapProvider = new FileMapProvider(mapFilename, "");
     /// @todo Set coordinates
-    QGeoCoordinate first = QGeoCoordinate(1,1,0);
-    QGeoCoordinate second = QGeoCoordinate(2,2,0);
+    QGeoCoordinate first = QGeoCoordinate();
+    first.setLatitude(-1);
+    first.setLongitude(-1);
+    QGeoCoordinate second = QGeoCoordinate(3, 3,0);
+    second.setLongitude(3);
+    second.setLatitude(3);
     QPair<QGeoCoordinate, QGeoCoordinate> coordPair(first, second);
     mapFragment = mapProvider->getImage(coordPair);
 
     qDebug() << mapFragment->limits().first.toString();
 
     mapImage = mapFragment;
-
     missionControl = new MissionControl::MissionControl(mapFragment, this);
 
     timer = new QTimer(this);
@@ -70,7 +73,6 @@ WebSocket::WebSocketServer *MainWindow::getServer()
 
 void MainWindow::timerTimeout()
 {
-    qDebug();
     this->ui->output->updateImage(mapImage);
 }
 

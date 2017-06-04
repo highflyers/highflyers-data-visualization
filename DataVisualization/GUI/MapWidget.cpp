@@ -36,8 +36,8 @@ void MapWidget::updateImage(const QImage &displayImage)
 QGeoCoordinate MapWidget::relativeToAbsolute(double x, double y)
 {
     double absX = mapLimits.first.longitude() + x * (mapLimits.second.longitude() - mapLimits.first.longitude());
-    double absY = mapLimits.first.latitude() + y * (mapLimits.second.latitude() - mapLimits.first.latitude());
-    QGeoCoordinate ret(absX, absY, 0);
+    double absY = mapLimits.first.latitude() + (1-y) * (mapLimits.second.latitude() - mapLimits.first.latitude());
+    QGeoCoordinate ret(absY, absX, 0);
     qDebug() << "Relative position = (" << x << y << ") -> absolute position = " << ret.toString();
     return ret;
 }

@@ -76,12 +76,12 @@ void WebSocketServer::processTextMessage(QString message)
 
     QJsonArray data = object["data"].toArray();
     auto dataIt = msg->data.begin();
-    qDebug() << "Data: ";
+//    qDebug() << "Data: ";
     for(auto it = data.begin(); it != data.end(); ++it){
         if(dataIt != msg->data.end()){
             QJsonValue temp = *it;
             *dataIt = temp.toInt();
-            qDebug() << *dataIt;
+//            qDebug() << *dataIt;
             ++dataIt;
         } else {
             break;

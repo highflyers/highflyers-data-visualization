@@ -6,12 +6,12 @@ namespace MissionControl {
 
 MissionControl::MissionControl(DisplayImage *mapFragment, QObject *parent) : QObject(parent)
 {
-    mapModel = new PathOverlay(new ColorMapOverlay(mapFragment));
+    mapModel = new PathOverlay(new ColorMapOverlay(new ColorMapOverlay(new ColorMapOverlay(new ColorMapOverlay(mapFragment, green), yellow),red), black));
 }
 
 void MissionControl::newMessage(const Message &message)
 {
-    qDebug() << message.ID;
+    qDebug() << message.toString();
     Drone *drone = getDrone(message.ID);
     if(drone)
     {
