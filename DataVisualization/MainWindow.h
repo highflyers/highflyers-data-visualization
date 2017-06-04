@@ -10,7 +10,7 @@
 #include <MapImageManipulation/FileMapProvider.h>
 #include <MapImageManipulation/MapFragment.h>
 #include <MapImageManipulation/ColorMapOverlay.h>
-#include <WebSocketServer/WebSocketServer.h>
+#include <WebSocket/WebSocketServer.h>
 
 #include <MissionControl/MissionControl.h>
 
@@ -28,7 +28,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    WebSocketServer* getServer();
+    WebSocket::WebSocketServer* getServer();
 
 private:
     const unsigned TIMER_RATE = 1000;
@@ -37,7 +37,7 @@ private:
     MapProvider *mapProvider;
     DisplayImage *mapFragment;
     DisplayImage *mapImage;
-    WebSocketServer *webSocketServer;
+    WebSocket::WebSocketServer *webSocketServer;
     MissionControl::MissionControl *missionControl;
 
 private slots:
@@ -45,7 +45,6 @@ private slots:
 
 public slots:
     void updateImage(DisplayImage *image);
-    void newMessage(const Message &message);
 };
 
 #endif // MAINWINDOW_H

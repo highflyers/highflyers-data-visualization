@@ -9,16 +9,22 @@
 #include <Message.h>
 #include <QJsonObject>
 
+#include <WebSocket/ServerStats.h>
+
+namespace WebSocket {
+
 class WebSocketServer : public QObject
 {
     Q_OBJECT
 public:
-    explicit WebSocketServer(quint16 port, bool debug = false, QObject *parent = Q_NULLPTR);
+    explicit WebSocketServer(quint16 port, QObject *parent = Q_NULLPTR);
     ~WebSocketServer();
+    void emitUpdate();
 
 signals:
     void closed();
     void newWebMessage(const Message &msg);
+    void statusUpdate(WebSocket::ServerStats status);
 
 private slots:
     void onNewConnection();
@@ -29,9 +35,11 @@ private slots:
 private:
     QWebSocketServer *m_pWebSocketServer;
     QList<QWebSocket *> m_clients;
-    bool m_debug;
 
     QJsonObject objectFromString(const QString &m);
+    QHostAddress localAddress();
 };
+
+}
 
 #endif // WEBSOCKETSERVER_H

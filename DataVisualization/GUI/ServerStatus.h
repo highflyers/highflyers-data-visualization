@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <ServerStatus.h>
 
+#include <WebSocket/ServerStats.h>
+
 namespace Ui {
 class ServerStatus;
 }
@@ -17,7 +19,7 @@ public:
     ~ServerStatus();
 
 public slots:
-    void updateStatus(const ServerStatus &status);
+    void updateStatus(const WebSocket::ServerStats &status);
 
 private:
     Ui::ServerStatus *ui;

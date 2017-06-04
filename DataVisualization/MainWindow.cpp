@@ -8,6 +8,10 @@
 
 #include <MapImageManipulation/PathOverlay.h>
 
+#include <WebSocket/WebSocketServer.h>
+#include <WebSocket/ServerStats.h>
+#include <GUI/ServerStatus.h>
+
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -38,13 +42,14 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(timer, SIGNAL(timeout()), this, SLOT(timerTimeout()));
     timer->start(TIMER_RATE);
 
-    bool debug = true;//parser.isSet(dbgOption);
-    quint16 port = 1;
-    webSocketServer = new WebSocketServer(debug, port);
+    quint16 port = 1234;
+    webSocketServer = new WebSocket::WebSocketServer(port);
 
     connect(webSocketServer, SIGNAL(newWebMessage(Message)), this, SLOT(newMessage(Message)));
     connect(webSocketServer, SIGNAL(newWebMessage(Message)), missionControl, SLOT(newMessage(Message)));
     connect(webSocketServer, SIGNAL(newWebMessage(Message)), this->ui->widget_vehicles, SLOT(newMessage(Message)));
+    connect(webSocketServer, SIGNAL(statusUpdate(WebSocket::ServerStats)), this->ui->widget_server, SLOT(updateStatus(WebSocket::ServerStats)));
+    webSocketServer->emitUpdate();
     connect(this->ui->output, SIGNAL(pointSelected(QGeoCoordinate)), this->ui->widget_coord, SLOT(update(QGeoCoordinate)));
     connect(missionControl, SIGNAL(newImage(DisplayImage*)), this, SLOT(updateImage(DisplayImage*)));
 }
@@ -58,7 +63,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-WebSocketServer *MainWindow::getServer()
+WebSocket::WebSocketServer *MainWindow::getServer()
 {
     return this->webSocketServer;
 }
@@ -67,11 +72,6 @@ void MainWindow::timerTimeout()
 {
     qDebug();
     this->ui->output->updateImage(mapImage);
-}
-
-void MainWindow::newMessage(const Message &message)
-{
-//    this->ui->label_message->setText(message.toString());
 }
 
 void MainWindow::updateImage(DisplayImage *image)

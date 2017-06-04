@@ -36,12 +36,13 @@ SOURCES += main.cpp\
     MapImageManipulation/ColorMapOverlay.cpp \
     MapImageManipulation/FileMapProvider.cpp \
     MapImageManipulation/PathOverlay.cpp \
-    WebSocketServer/WebSocketServer.cpp \
+    WebSocket/WebSocketServer.cpp \
     qcustomplot.cpp \
     MapImageManipulation/DisplayImage.cpp \
     MapImageManipulation/MapFragment.cpp \
     GUI/CoordinateDisplay.cpp \
-    MissionControl/MissionControl.cpp
+    MissionControl/MissionControl.cpp \
+    WebSocket/ServerStats.cpp
 
 HEADERS  += MainWindow.h \
     GUI/MapWidget.h \
@@ -57,12 +58,13 @@ HEADERS  += MainWindow.h \
     MapImageManipulation/MapOverlay.h \
     MapImageManipulation/PathOverlay.h \
     MapImageManipulation/MapProvider.h \
-    WebSocketServer/WebSocketServer.h \
+    WebSocket/WebSocketServer.h \
     qcustomplot.h \
     MapImageManipulation/DisplayImage.h \
     GUI/CoordinateDisplay.h \
     MapImageManipulation/MapProvider.h \
-    MissionControl/MissionControl.h
+    MissionControl/MissionControl.h \
+    WebSocket/ServerStats.h
 
 FORMS    += MainWindow.ui \
     GUI/ServerStatus.ui \
