@@ -7,6 +7,9 @@
 #include <QJsonValue>
 #include <QJsonArray>
 
+#include <QTimer>
+#include <QtMath>
+
 QT_USE_NAMESPACE
 
 
@@ -17,6 +20,13 @@ WebSocketServer::WebSocketServer(quint16 port, bool debug, QObject *parent) :
     m_clients(),
     m_debug(debug)
 {
+    // temporary
+    QTimer *timer = new QTimer(this);
+    timer->setSingleShot(false);
+    timer->setInterval(1000);
+    connect(timer, SIGNAL(timeout()), this, SLOT(timerTimeout()));
+    timer->start();
+
     if (m_pWebSocketServer->listen(QHostAddress::Any, port)) {
         if (m_debug)
             qDebug() << "WebSocketServer listening on port" << port;
@@ -55,7 +65,7 @@ void WebSocketServer::processTextMessage(QString message)
         pClient->sendTextMessage(message);
     }
     Message *msg = new Message();
-    QString m = "{ \"ID\" : 2, \"name\" : \"samolot\", \"latitude\" : 20.56, \"longitude\" : 56.78, \"altitude\" : 56.87, \"data\" : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]} ";
+    QString m = "{ \"ID\" : 2, \"name\" : \"samolot\", \"latitude\" : 20.56, \"longitude\" : 56.78, \"altitude\" : 56.87, \"data\" : [10, 2, 30, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]} ";
     QJsonObject object = objectFromString(m);
     msg->ID = object["ID"].toDouble();
     qDebug() << "ID: " << msg->ID;
@@ -66,18 +76,16 @@ void WebSocketServer::processTextMessage(QString message)
     msg->position.setLongitude(object["longitude"].toDouble());
     msg->position.setAltitude(object["altitude"].toDouble());
 
-    qDebug() << "Latitude: " << msg->position.latitude();
-    qDebug() << "Longitude: " << msg->position.longitude();
-    qDebug() << "Altitude: " << msg->position.altitude();
+    qDebug() << "Latitude: " << msg->position.latitude() << "Longitude: " << msg->position.longitude() << "Altitude: " << msg->position.altitude();
 
     QJsonArray data = object["data"].toArray();
     auto dataIt = msg->data.begin();
-    qDebug() << "Data: ";
+//    qDebug() << "Data: ";
     for(auto it = data.begin(); it != data.end(); ++it){
         if(dataIt != msg->data.end()){
             QJsonValue temp = *it;
             *dataIt = temp.toInt();
-            qDebug() << *dataIt;
+//            qDebug() << *dataIt;
             ++dataIt;
         } else {
             break;
@@ -86,6 +94,17 @@ void WebSocketServer::processTextMessage(QString message)
 
     qDebug() << "Data: " << data;
 
+    static double phi = 0.0;
+    phi += 0.3;
+    msg->data.clear();
+    for(int i = 0; i < 16; ++i)
+    {
+        msg->data.append(((qSin(phi + 3.14*2/16*i))+1)*10);
+    }
+    qDebug() << msg->data;
+    emit newWebMessage(*msg);
+    msg->ID = 1;
+    msg->name = "quadrocopter";
     emit newWebMessage(*msg);
     delete msg;
 }
@@ -111,6 +130,11 @@ void WebSocketServer::socketDisconnected()
         m_clients.removeAll(pClient);
         pClient->deleteLater();
     }
+}
+
+void WebSocketServer::timerTimeout()
+{
+    processTextMessage(QString());
 }
 
 QJsonObject WebSocketServer::objectFromString(const QString &m)

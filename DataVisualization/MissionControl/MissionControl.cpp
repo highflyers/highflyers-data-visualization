@@ -4,7 +4,7 @@
 
 namespace MissionControl {
 
-MissionControl::MissionControl(DisplayImage *mapFragment, MainWindow *view, QObject *parent) : view(view), QObject(parent)
+MissionControl::MissionControl(DisplayImage *mapFragment, QObject *parent) : QObject(parent)
 {
     mapModel = new PathOverlay(new ColorMapOverlay(mapFragment));
 }
@@ -30,6 +30,7 @@ void MissionControl::newMessage(const Message &message)
         qDebug() << "Creating new drone model for ID = " << message.ID;
         Drone *drone = new Drone();
         drone->ID = message.ID;
+        drone->name = message.name;
         drones.append(drone);
         newMessage(message);
     }

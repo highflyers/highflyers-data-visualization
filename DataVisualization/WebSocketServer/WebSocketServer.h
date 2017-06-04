@@ -9,7 +9,6 @@
 #include <Message.h>
 #include <QJsonObject>
 
-
 class WebSocketServer : public QObject
 {
     Q_OBJECT
@@ -26,6 +25,9 @@ private slots:
     void processTextMessage(QString message);
     void processBinaryMessage(QByteArray message);
     void socketDisconnected();
+
+    //temporary
+    void timerTimeout();
 
 private:
     QWebSocketServer *m_pWebSocketServer;

@@ -2,8 +2,7 @@
 
 Message::Message(QObject *parent) : QObject(parent)
 {
-    std::vector<int> temp(MESSAGE_DATA_SIZE, 0);
-    data = temp;
+    data = QVector<int>(MESSAGE_DATA_SIZE, 0);
 }
 
 QString Message::toString()

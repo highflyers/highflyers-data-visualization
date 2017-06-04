@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QtPositioning/QGeoCoordinate>
 
+#include <QVector>
+
 /**
  * @brief Representation of a data sent by drone
  */
@@ -20,7 +22,7 @@ public:
     int ID;
     QString name;
     QGeoCoordinate position;
-    std::vector<int> data;
+    QVector<int> data;
 
     QString toString();
 };

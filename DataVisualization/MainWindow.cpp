@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mapImage = mapFragment;
 
-    missionControl = new MissionControl::MissionControl(mapFragment, this, this);
+    missionControl = new MissionControl::MissionControl(mapFragment, this);
 
     timer = new QTimer(this);
     timer->setSingleShot(false);
@@ -42,7 +42,8 @@ MainWindow::MainWindow(QWidget *parent) :
     quint16 port = 1;
     webSocketServer = new WebSocketServer(debug, port);
 
-    connect(webSocketServer, SIGNAL(newWebMessage(Message)), mapImage, SLOT(processData(Message)));
+    connect(webSocketServer, SIGNAL(newWebMessage(Message)), missionControl, SLOT(newMessage(Message)));
+    connect(webSocketServer, SIGNAL(newWebMessage(Message)), this->ui->widget_vehicles, SLOT(newMessage(Message)));
     connect(this->ui->output, SIGNAL(pointSelected(QGeoCoordinate)), this->ui->widget_coord, SLOT(update(QGeoCoordinate)));
     connect(missionControl, SIGNAL(newImage(DisplayImage*)), this, SLOT(updateImage(DisplayImage*)));
 }
@@ -64,7 +65,6 @@ WebSocketServer *MainWindow::getServer()
 void MainWindow::timerTimeout()
 {
     qDebug();
-    missionControl->newMessage(Message());
     this->ui->output->updateImage(mapImage);
 }
 

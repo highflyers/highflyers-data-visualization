@@ -9,6 +9,8 @@
 #include <MapImageManipulation/ColorMapOverlay.h>
 #include <MapImageManipulation/PathOverlay.h>
 
+#include <GUI/VehicleWidget.h>
+
 class MainWindow;
 
 namespace MissionControl {
@@ -18,19 +20,17 @@ struct Drone
     int ID;
     QString name;
     bool isPathOverlayActive;
-
 };
 
 class MissionControl : public QObject
 {
     Q_OBJECT
 public:
-    explicit MissionControl(DisplayImage *mapFragment, MainWindow *view, QObject *parent = 0);
+    explicit MissionControl(DisplayImage *mapFragment, QObject *parent = 0);
 
 private:
     QVector<Drone*> drones;
     Drone *getDrone(int ID);
-    MainWindow *view;
     DisplayImage *mapModel;
 
 signals:

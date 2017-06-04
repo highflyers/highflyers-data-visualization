@@ -11,7 +11,10 @@
 #include <MapImageManipulation/MapFragment.h>
 #include <MapImageManipulation/ColorMapOverlay.h>
 #include <WebSocketServer/WebSocketServer.h>
+
 #include <MissionControl/MissionControl.h>
+
+#include <GUI/VehicleContainer.h>
 
 namespace Ui {
 class MainWindow;

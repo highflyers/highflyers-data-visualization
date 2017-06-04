@@ -1,4 +1,5 @@
 #include "MapFragment.h"
+#include <QDebug>
 
 MapFragment::MapFragment(QObject *parent) : DisplayImage(parent)
 {
@@ -7,6 +8,7 @@ MapFragment::MapFragment(QObject *parent) : DisplayImage(parent)
 
 QImage MapFragment::processData(const Message &message)
 {
+    qDebug();
     return this->image;
 }
 
