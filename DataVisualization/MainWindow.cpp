@@ -22,9 +22,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QString mapFilename = QFileDialog::getOpenFileName(this, tr("Open map file"),
                                                        "/home",
-                                                       tr("Images (*.png *.xpm *.jpg)"));
+                                                       tr(""));
+
     /// @todo Add config file
-    mapProvider = new FileMapProvider(mapFilename, "");
+    mapProvider = new FileMapProvider(mapFilename, mapFilename);
     /// @todo Set coordinates
     QGeoCoordinate first = QGeoCoordinate();
     first.setLatitude(-1);
