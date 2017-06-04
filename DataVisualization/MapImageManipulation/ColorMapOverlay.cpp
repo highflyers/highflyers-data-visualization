@@ -1,4 +1,5 @@
 #include "ColorMapOverlay.h"
+#include <QDebug>
 
 ColorMapOverlay::ColorMapOverlay(QObject *parent) : MapOverlay(parent)
 {
@@ -44,6 +45,7 @@ QImage ColorMapOverlay::toImage()
 
 QImage ColorMapOverlay::processData(const Message &message)
 {
+    qDebug();
     /// @todo Implement operations
     image = parentImage->processData(message);
     width = image.width();

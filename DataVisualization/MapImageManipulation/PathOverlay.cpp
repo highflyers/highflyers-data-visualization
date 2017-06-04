@@ -1,6 +1,7 @@
 #include "PathOverlay.h"
 
 #include <QtCore>
+#include <QDebug>
 
 PathOverlay::PathOverlay(DisplayImage *parentImage, QObject *parent) : MapOverlay(parent), parentImage(parentImage)
 {
@@ -33,6 +34,7 @@ QImage PathOverlay::toImage()
 
 QImage PathOverlay::processData(const Message &message)
 {
+    qDebug();
     image = parentImage->processData(message);
     width = image.width();
     height = image.height();

@@ -22,7 +22,7 @@ void MapWidget::resizeEvent(QResizeEvent *event)
 
 void MapWidget::updateImage(const DisplayImage *displayImage)
 {
-    qDebug() << displayImage->limits().first.toString();
+    qDebug();
     updateImage(displayImage->image);
     this->mapLimits = displayImage->limits();
 }

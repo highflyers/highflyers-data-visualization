@@ -1,13 +1,18 @@
 #include "Message.h"
+#include <QVector>
 
 Message::Message(QObject *parent) : QObject(parent)
 {
-    std::vector<int> temp(MESSAGE_DATA_SIZE, 0);
-    data = temp;
+    data = QVector<int>(MESSAGE_DATA_SIZE, 0);
 }
 
-QString Message::toString()
+QString Message::toString() const
 {
-    /// @todo Implement!
-    return "Message";
+    QString ret;
+    ret += name + "\n";
+    ret += QString::number(ID) + ", " + name + "\n";
+    foreach (int v, data) {
+        ret+=QString::number(v) + ", ";
+    }
+    return ret;
 }

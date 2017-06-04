@@ -1,6 +1,9 @@
 #include "CoordinateDisplay.h"
 #include "ui_CoordinateDisplay.h"
 
+#include <QString>
+#include <QStringList>
+
 CoordinateDisplay::CoordinateDisplay(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::CoordinateDisplay)
@@ -15,17 +18,7 @@ CoordinateDisplay::~CoordinateDisplay()
 
 void CoordinateDisplay::update(const QGeoCoordinate &coordinate)
 {
-    double deg, min, sec, pos;
-    pos = coordinate.latitude();
-    deg = (int)pos;
-    min = (pos - deg) * 60;
-    sec = (min - (int)min) * 60;
-    min = (int)min;
-    this->ui->label_lat->setText(QString::number(deg) + " " + QString::number(min) + " " + QString::number(sec));
-    pos = coordinate.longitude();
-    deg = (int)pos;
-    min = (pos - deg) * 60;
-    sec = (min - (int)min) * 60;
-    min = (int)min;
-    this->ui->label_lon->setText(QString::number(deg) + " " + QString::number(min) + " " + QString::number(sec));
+    QStringList tokens = coordinate.toString().split(',',  QString::SkipEmptyParts);
+    this->ui->label_lon->setText(tokens[0].trimmed());
+    this->ui->label_lat->setText(tokens[1].trimmed());
 }

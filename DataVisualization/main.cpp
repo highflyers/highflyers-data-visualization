@@ -1,6 +1,5 @@
 #include "MainWindow.h"
 #include <QApplication>
-#include <WebSocketServer/WebSocketServer.h>
 
 int main(int argc, char *argv[])
 {

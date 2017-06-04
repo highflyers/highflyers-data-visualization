@@ -60,8 +60,8 @@
        </property>
        <item>
         <layout class="QGridLayout" name="statusLayout">
-         <item row="2" column="0">
-          <widget class="VehicleWidget" name="widget_vehicles" native="true"/>
+         <item row="4" column="0">
+          <widget class="CoordinateDisplay" name="widget_coord" native="true"/>
          </item>
          <item row="0" column="0">
           <widget class="ServerStatus" name="widget_server" native="true">
@@ -102,8 +102,8 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="0">
-          <widget class="CoordinateDisplay" name="widget_coord" native="true"/>
+         <item row="2" column="0">
+          <widget class="VehicleContainer" name="widget_vehicles" native="true"/>
          </item>
         </layout>
        </item>
@@ -137,7 +137,7 @@
   <customwidget>
    <class>MapWidget</class>
    <extends>QWidget</extends>
-   <header>MapWidget.h</header>
+   <header>GUI/MapWidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -153,15 +153,15 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>VehicleWidget</class>
-   <extends>QWidget</extends>
-   <header>GUI/VehicleWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>CoordinateDisplay</class>
    <extends>QWidget</extends>
    <header>GUI/CoordinateDisplay.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>VehicleContainer</class>
+   <extends>QWidget</extends>
+   <header>GUI/VehicleContainer.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
