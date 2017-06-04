@@ -9,7 +9,6 @@
 #include <Message.h>
 #include <QJsonObject>
 
-
 class WebSocketServer : public QObject
 {
     Q_OBJECT

@@ -26,13 +26,6 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="label_message">
-      <property name="text">
-       <string>TextLabel</string>
-      </property>
-     </widget>
-    </item>
-    <item>
      <widget class="QWidget" name="statusWidget" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -67,34 +60,8 @@
        </property>
        <item>
         <layout class="QGridLayout" name="statusLayout">
-         <item row="2" column="0">
-          <widget class="VehicleWidget" name="widget_vehicles" native="true"/>
-         </item>
-         <item row="3" column="0">
-          <spacer name="verticalSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="5" column="0">
+         <item row="4" column="0">
           <widget class="CoordinateDisplay" name="widget_coord" native="true"/>
-         </item>
-         <item row="1" column="0">
-          <widget class="TimeStatus" name="widget_time" native="true">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-          </widget>
          </item>
          <item row="0" column="0">
           <widget class="ServerStatus" name="widget_server" native="true">
@@ -112,6 +79,32 @@
            </property>
           </widget>
          </item>
+         <item row="3" column="0">
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="1" column="0">
+          <widget class="TimeStatus" name="widget_time" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="VehicleContainer" name="widget_vehicles" native="true"/>
+         </item>
         </layout>
        </item>
       </layout>
@@ -125,7 +118,7 @@
      <x>0</x>
      <y>0</y>
      <width>626</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>
@@ -160,15 +153,15 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>VehicleWidget</class>
-   <extends>QWidget</extends>
-   <header>GUI/VehicleWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>CoordinateDisplay</class>
    <extends>QWidget</extends>
    <header>GUI/CoordinateDisplay.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>VehicleContainer</class>
+   <extends>QWidget</extends>
+   <header>GUI/VehicleContainer.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

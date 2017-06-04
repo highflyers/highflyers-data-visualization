@@ -7,6 +7,9 @@
 #include <QJsonValue>
 #include <QJsonArray>
 
+#include <QTimer>
+#include <QtMath>
+
 QT_USE_NAMESPACE
 
 
