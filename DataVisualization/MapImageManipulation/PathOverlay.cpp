@@ -1,6 +1,7 @@
 #include "PathOverlay.h"
 
 #include <QtCore>
+#include <QDebug>
 
 PathOverlay::PathOverlay(DisplayImage *parentImage, QObject *parent) : MapOverlay(parent), parentImage(parentImage)
 {
@@ -45,8 +46,9 @@ int PathOverlay::absoluteLatitudeToRelative(QGeoCoordinate position)
 {
     QPair<QGeoCoordinate, QGeoCoordinate> limits = this->limits();
     int result = -1;
+    double unit = height/(limits.second.latitude() - limits.first.latitude());
     if(position.latitude() > limits.first.latitude() && position.latitude() < limits.second.latitude())
-        result = static_cast<int>(width/(limits.second.latitude() - limits.first.latitude()) * (limits.second.latitude() - position.latitude()));
+        result = static_cast<int>((position.latitude() - limits.first.latitude()) * unit);
 
     return result;
 }

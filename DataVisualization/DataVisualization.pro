@@ -27,7 +27,7 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         MainWindow.cpp \
-    MapWidget.cpp \
+    GUI/MapWidget.cpp \
     Message.cpp \
     GUI/ServerStatus.cpp \
     GUI/TimeStatus.cpp \
@@ -35,16 +35,17 @@ SOURCES += main.cpp\
     GUI/VehicleContainer.cpp \
     MapImageManipulation/ColorMapOverlay.cpp \
     MapImageManipulation/FileMapProvider.cpp \
-    MapImageManipulation/ImageMixer.cpp \
     MapImageManipulation/PathOverlay.cpp \
-    WebSocketServer/WebSocketServer.cpp \
+    WebSocket/WebSocketServer.cpp \
     qcustomplot.cpp \
     MapImageManipulation/DisplayImage.cpp \
     MapImageManipulation/MapFragment.cpp \
-    GUI/CoordinateDisplay.cpp
+    GUI/CoordinateDisplay.cpp \
+    MissionControl/MissionControl.cpp \
+    WebSocket/ServerStats.cpp
 
 HEADERS  += MainWindow.h \
-    MapWidget.h \
+    GUI/MapWidget.h \
     Message.h \
     GUI/ServerStatus.h \
     GUI/TimeStatus.h \
@@ -53,16 +54,17 @@ HEADERS  += MainWindow.h \
     GUI/VehicleContainer.h \
     MapImageManipulation/ColorMapOverlay.h \
     MapImageManipulation/FileMapProvider.h \
-    MapImageManipulation/ImageMixer.h \
     MapImageManipulation/MapFragment.h \
     MapImageManipulation/MapOverlay.h \
     MapImageManipulation/PathOverlay.h \
     MapImageManipulation/MapProvider.h \
-    WebSocketServer/WebSocketServer.h \
+    WebSocket/WebSocketServer.h \
     qcustomplot.h \
     MapImageManipulation/DisplayImage.h \
     GUI/CoordinateDisplay.h \
-    MapImageManipulation/MapProvider.h
+    MapImageManipulation/MapProvider.h \
+    MissionControl/MissionControl.h \
+    WebSocket/ServerStats.h
 
 FORMS    += MainWindow.ui \
     GUI/ServerStatus.ui \
@@ -70,4 +72,3 @@ FORMS    += MainWindow.ui \
     GUI/VehicleWidget.ui \
     GUI/VehicleContainer.ui \
     GUI/CoordinateDisplay.ui
-

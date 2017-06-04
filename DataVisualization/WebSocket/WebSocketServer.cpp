@@ -7,23 +7,29 @@
 #include <QJsonValue>
 #include <QJsonArray>
 
+#include <QNetworkInterface>
+
+#include <QTimer>
+#include <QtMath>
+
+
 QT_USE_NAMESPACE
 
+namespace WebSocket {
 
-WebSocketServer::WebSocketServer(quint16 port, bool debug, QObject *parent) :
+WebSocketServer::WebSocketServer(quint16 port, QObject *parent) :
     QObject(parent),
     m_pWebSocketServer(new QWebSocketServer(QStringLiteral("Echo Server"),
                                             QWebSocketServer::NonSecureMode, this)),
-    m_clients(),
-    m_debug(debug)
+    m_clients()
 {
     if (m_pWebSocketServer->listen(QHostAddress::Any, port)) {
-        if (m_debug)
-            qDebug() << "WebSocketServer listening on port" << port;
+        qDebug() << "WebSocketServer listening on port" << port;
         connect(m_pWebSocketServer, &QWebSocketServer::newConnection,
                 this, &WebSocketServer::onNewConnection);
         connect(m_pWebSocketServer, &QWebSocketServer::closed, this, &WebSocketServer::closed);
     }
+    emitUpdate();
 }
 
 
@@ -31,6 +37,11 @@ WebSocketServer::~WebSocketServer()
 {
     m_pWebSocketServer->close();
     qDeleteAll(m_clients.begin(), m_clients.end());
+}
+
+void WebSocketServer::emitUpdate()
+{
+    emit statusUpdate(ServerStats(localAddress(), m_pWebSocketServer->serverPort(), m_pWebSocketServer->isListening(), m_clients.length()));
 }
 
 
@@ -43,74 +54,68 @@ void WebSocketServer::onNewConnection()
     connect(pSocket, &QWebSocket::disconnected, this, &WebSocketServer::socketDisconnected);
 
     m_clients << pSocket;
+    emitUpdate();
 }
 
 
 void WebSocketServer::processTextMessage(QString message)
 {
     QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
-    if (m_debug)
-        qDebug() << "Message received:" << message;
+    qDebug() << "Message received:" << message;
     if (pClient) {
         pClient->sendTextMessage(message);
     }
     Message *msg = new Message();
-    QString m = "{ \"ID\" : 2, \"name\" : \"samolot\", \"latitude\" : 20.56, \"longitude\" : 56.78, \"altitude\" : 56.87, \"data\" : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]} ";
-    QJsonObject object = objectFromString(m);
-    msg->ID = object["ID"].toDouble();
-    qDebug() << "ID: " << msg->ID;
+    QJsonObject object = objectFromString(message);
+    msg->ID = object["ID"].toInt();
     msg->name = object["name"].toString();
-    qDebug() << "Name: " << msg->name;
 
     msg->position.setLatitude(object["latitude"].toDouble());
     msg->position.setLongitude(object["longitude"].toDouble());
     msg->position.setAltitude(object["altitude"].toDouble());
 
-    qDebug() << "Latitude: " << msg->position.latitude();
-    qDebug() << "Longitude: " << msg->position.longitude();
-    qDebug() << "Altitude: " << msg->position.altitude();
-
     QJsonArray data = object["data"].toArray();
     auto dataIt = msg->data.begin();
-    qDebug() << "Data: ";
+//    qDebug() << "Data: ";
     for(auto it = data.begin(); it != data.end(); ++it){
         if(dataIt != msg->data.end()){
             QJsonValue temp = *it;
             *dataIt = temp.toInt();
-            qDebug() << *dataIt;
+//            qDebug() << *dataIt;
             ++dataIt;
         } else {
             break;
         }
     }
 
-    qDebug() << "Data: " << data;
+    qDebug() << msg->toString();
 
     emit newWebMessage(*msg);
     delete msg;
+    emitUpdate();
 }
 
 
 void WebSocketServer::processBinaryMessage(QByteArray message)
 {
     QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
-    if (m_debug)
-        qDebug() << "Binary Message received:" << message;
+    qDebug() << "Binary Message received:" << message;
     if (pClient) {
         pClient->sendBinaryMessage(message);
     }
+    emitUpdate();
 }
 
 
 void WebSocketServer::socketDisconnected()
 {
     QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
-    if (m_debug)
-        qDebug() << "socketDisconnected:" << pClient;
+    qDebug() << "socketDisconnected:" << pClient;
     if (pClient) {
         m_clients.removeAll(pClient);
         pClient->deleteLater();
     }
+    emitUpdate();
 }
 
 QJsonObject WebSocketServer::objectFromString(const QString &m)
@@ -137,4 +142,19 @@ QJsonObject WebSocketServer::objectFromString(const QString &m)
       }
 
       return obj;
+}
+
+QHostAddress WebSocketServer::localAddress()
+{
+    QHostAddress retAddress;
+    foreach (const QHostAddress &address, QNetworkInterface::allAddresses()) {
+        if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress(QHostAddress::LocalHost))
+        {
+             qDebug() << address.toString();
+             retAddress = address;
+        }
+    }
+    return retAddress;
+}
+
 }

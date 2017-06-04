@@ -1,4 +1,5 @@
 #include "ColorMapOverlay.h"
+#include <QDebug>
 
 ColorMapOverlay::ColorMapOverlay(QObject *parent) : MapOverlay(parent)
 {
@@ -104,14 +105,16 @@ int ColorMapOverlay::absoluteLatitudeToRelative(QGeoCoordinate position)
 {
     QPair<QGeoCoordinate, QGeoCoordinate> limits = this->limits();
     int result = -1;
+    double unit = height/(limits.second.latitude() - limits.first.latitude());
     if(position.latitude() > limits.first.latitude() && position.latitude() < limits.second.latitude())
-        result = static_cast<int>(width/(limits.second.latitude() - limits.first.latitude()) * (limits.second.latitude() - position.latitude()));
+        result = static_cast<int>((position.latitude() - limits.first.latitude()) * unit);
 
     return result;
 }
 
 QImage ColorMapOverlay::processData(const Message &message)
 {
+    qDebug();
     /// @todo Implement operations
     image = parentImage->processData(message);
     width = image.width();
