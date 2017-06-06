@@ -38,6 +38,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     qDebug() << mapFragment->limits().first.toString();
 
+    QString logDirName = QFileDialog::getExistingDirectory(this, tr("Select log directory"));
+    inputLogger = new DataStorage::InputLogger(logDirName);
+
     mapImage = mapFragment;
     missionControl = new MissionControl::MissionControl(mapFragment, this);
 
@@ -48,6 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     quint16 port = 1234;
     webSocketServer = new WebSocket::WebSocketServer(port);
+    webSocketServer->setLogger(inputLogger);
 
     connect(webSocketServer, SIGNAL(newWebMessage(Message)), this, SLOT(newMessage(Message)));
     connect(webSocketServer, SIGNAL(newWebMessage(Message)), missionControl, SLOT(newMessage(Message)));
@@ -60,11 +64,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    delete webSocketServer;
-    delete mapProvider;
-    delete mapFragment;
-    delete mapImage;
     delete ui;
+    if (webSocketServer) delete webSocketServer;
+    if (mapProvider) delete mapProvider;
+    if (mapFragment) delete mapFragment;
+    if (webSocketServer) delete webSocketServer;
+    if (missionControl) delete missionControl;
+    if (inputLogger) delete inputLogger;
 }
 
 WebSocket::WebSocketServer *MainWindow::getServer()

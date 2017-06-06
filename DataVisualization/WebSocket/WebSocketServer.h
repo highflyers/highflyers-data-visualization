@@ -10,6 +10,7 @@
 #include <QJsonObject>
 
 #include <WebSocket/ServerStats.h>
+#include <DataStorage/InputLogger.h>
 
 namespace WebSocket {
 
@@ -20,6 +21,7 @@ public:
     explicit WebSocketServer(quint16 port, QObject *parent = Q_NULLPTR);
     ~WebSocketServer();
     void emitUpdate();
+    void setLogger(DataStorage::InputLogger *logger);
 
 signals:
     void closed();
@@ -38,6 +40,8 @@ private:
 
     QJsonObject objectFromString(const QString &m);
     QHostAddress localAddress();
+
+    DataStorage::InputLogger *inputLogger = nullptr;
 };
 
 }
