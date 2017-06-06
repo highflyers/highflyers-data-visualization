@@ -15,6 +15,7 @@
 #include <MissionControl/MissionControl.h>
 
 #include <GUI/VehicleContainer.h>
+#include <DataStorage/InputLogger.h>
 
 namespace Ui {
 class MainWindow;
@@ -33,12 +34,13 @@ public:
 private:
     const unsigned TIMER_RATE = 1000;
     Ui::MainWindow *ui;
-    QTimer *timer;
-    MapProvider *mapProvider;
-    DisplayImage *mapFragment;
-    DisplayImage *mapImage;
-    WebSocket::WebSocketServer *webSocketServer;
-    MissionControl::MissionControl *missionControl;
+    QTimer *timer = nullptr;
+    MapProvider *mapProvider = nullptr;
+    DisplayImage *mapFragment = nullptr;
+    DisplayImage *mapImage = nullptr;
+    WebSocket::WebSocketServer *webSocketServer = nullptr;
+    MissionControl::MissionControl *missionControl = nullptr;
+    DataStorage::InputLogger *inputLogger = nullptr;
 
 private slots:
     void timerTimeout();

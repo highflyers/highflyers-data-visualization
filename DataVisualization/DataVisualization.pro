@@ -42,7 +42,8 @@ SOURCES += main.cpp\
     MapImageManipulation/MapFragment.cpp \
     GUI/CoordinateDisplay.cpp \
     MissionControl/MissionControl.cpp \
-    WebSocket/ServerStats.cpp
+    WebSocket/ServerStats.cpp \
+    DataStorage/InputLogger.cpp
 
 HEADERS  += MainWindow.h \
     GUI/MapWidget.h \
@@ -64,7 +65,8 @@ HEADERS  += MainWindow.h \
     GUI/CoordinateDisplay.h \
     MapImageManipulation/MapProvider.h \
     MissionControl/MissionControl.h \
-    WebSocket/ServerStats.h
+    WebSocket/ServerStats.h \
+    DataStorage/InputLogger.h
 
 FORMS    += MainWindow.ui \
     GUI/ServerStatus.ui \

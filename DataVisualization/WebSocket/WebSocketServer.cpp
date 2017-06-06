@@ -44,6 +44,11 @@ void WebSocketServer::emitUpdate()
     emit statusUpdate(ServerStats(localAddress(), m_pWebSocketServer->serverPort(), m_pWebSocketServer->isListening(), m_clients.length()));
 }
 
+void WebSocketServer::setLogger(DataStorage::InputLogger *logger)
+{
+    this->inputLogger = logger;
+}
+
 
 void WebSocketServer::onNewConnection()
 {
@@ -60,6 +65,10 @@ void WebSocketServer::onNewConnection()
 
 void WebSocketServer::processTextMessage(QString message)
 {
+    if(inputLogger)
+    {
+        inputLogger->newData(message);
+    }
     QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
     qDebug() << "Message received:" << message;
     if (pClient) {
