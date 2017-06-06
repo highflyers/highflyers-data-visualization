@@ -38,9 +38,12 @@ private:
     QVector<QString> labels;
     QVector<double> chartData;
     QDateTime lastMessageTime;
+    bool chartMinMaxSet = false;
+    double chartMin, chartMax;
 
 private slots:
     void updateTime();
+    void chartClicked();
 };
 
 #endif // VEHICLEWIDGET_H

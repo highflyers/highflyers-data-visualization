@@ -40,6 +40,8 @@ VehicleWidget::VehicleWidget(int ID, const QString &name, QWidget *parent) :
     elapsedTimeTimer->setInterval(TIMER_INTERVAL);
     connect(elapsedTimeTimer, SIGNAL(timeout()), this, SLOT(updateTime()));
     elapsedTimeTimer->start();
+
+    connect(customPlot, SIGNAL(mouseDoubleClick(QMouseEvent*)), this, SLOT(chartClicked()));
 }
 
 VehicleWidget::~VehicleWidget()
@@ -57,7 +59,21 @@ void VehicleWidget::newMessage(const Message &message)
         chartData.append((double)v);
     }
     bars->setData(ticks, chartData);
-    customPlot->yAxis->setRange(0, 1.1*((*std::max_element(chartData.begin(), chartData.end())+0.01)));
+
+    double localMax = *std::max_element(chartData.begin(), chartData.end());
+    double localMin = *std::min_element(chartData.begin(), chartData.end());
+    if(chartMinMaxSet)
+    {
+        chartMax = chartMax > localMax ? chartMax : localMax;
+        chartMin = chartMin < localMin ? chartMin : localMin;
+    }
+    else
+    {
+        chartMax = localMax;
+        chartMin = localMin;
+        chartMinMaxSet = true;
+    }
+    customPlot->yAxis->setRange(chartMin, 1.1*(chartMax+0.01));
     customPlot->replot();
 
     lastMessageTime = QDateTime::currentDateTime();
@@ -67,4 +83,9 @@ void VehicleWidget::updateTime()
 {
     QDateTime currentTime = QDateTime::currentDateTime();
     this->ui->label_last_message->setText(QString::number(lastMessageTime.time().msecsTo(currentTime.time()) / 1000.0) + " s");
+}
+
+void VehicleWidget::chartClicked()
+{
+    chartMinMaxSet = false;
 }
