@@ -23,28 +23,28 @@ ColorMapOverlay::ColorMapOverlay(DisplayImage *parentImage, BeaconColor beaconCo
         case green:
             gradient = new QCPColorGradient();
             gradient->setColorStopAt(0, QColor(116,158,0,0));
-            gradient->setColorStopAt(0.1, QColor(116,158,0,127));
+            gradient->setColorStopAt(0.1, QColor(116,158,0,200));
             gradient->setColorStopAt(1, QColor(16,31,0,255));
             colorMap->setGradient(gradient->inverted());
             break;
         case red:
             gradient = new QCPColorGradient();
             gradient->setColorStopAt(0, QColor(255,0,4,0));
-            gradient->setColorStopAt(0.1, QColor(255,0,4,127));
+            gradient->setColorStopAt(0.1, QColor(255,0,4,200));
             gradient->setColorStopAt(1, QColor(115,0,2,255));
             colorMap->setGradient(gradient->inverted());
             break;
         case yellow:
             gradient = new QCPColorGradient();
             gradient->setColorStopAt(0, QColor(237,250,125,0));
-            gradient->setColorStopAt(0.1, QColor(237,250,125,127));
-            gradient->setColorStopAt(1, QColor(230,255,0,255));
+            gradient->setColorStopAt(0.1, QColor(237,250,125,200));
+            gradient->setColorStopAt(1, QColor(64,69,0,255));
             colorMap->setGradient(gradient->inverted());
             break;
         case black:
             gradient = new QCPColorGradient();
             gradient->setColorStopAt(0, QColor(183,184,176,0));
-            gradient->setColorStopAt(0.1, QColor(183,184,176,127));
+            gradient->setColorStopAt(0.1, QColor(183,184,176,255));
             gradient->setColorStopAt(1, QColor(0,0,0,255));
             colorMap->setGradient(gradient->inverted());
             break;
