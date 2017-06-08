@@ -54,26 +54,34 @@ void VehicleWidget::newMessage(const Message &message)
     qDebug();
     this->ui->label_pos->setText(message.position.toString().replace(',', '\n'));
 
-    chartData.clear();
-    foreach (int v, message.data) {
-        chartData.append((double)v);
-    }
-    bars->setData(ticks, chartData);
-
-    double localMax = *std::max_element(chartData.begin(), chartData.end());
-    double localMin = *std::min_element(chartData.begin(), chartData.end());
+    double localMin = *std::min_element(message.data.begin(), message.data.end());
     if(chartMinMaxSet)
     {
-        chartMax = chartMax > localMax ? chartMax : localMax;
         chartMin = chartMin < localMin ? chartMin : localMin;
     }
     else
     {
-        chartMax = localMax;
         chartMin = localMin;
         chartMinMaxSet = true;
     }
-    customPlot->yAxis->setRange(chartMin, 1.1*(chartMax+0.01));
+
+    chartData.clear();
+    foreach (int v, message.data) {
+        chartData.append((double)v - chartMin);
+    }
+    bars->setData(ticks, chartData);
+
+    double localMax = *std::max_element(chartData.begin(), chartData.end());
+    if(chartMinMaxSet)
+    {
+        chartMax = chartMax > localMax ? chartMax : localMax;
+    }
+    else
+    {
+        chartMax = localMax;
+        chartMinMaxSet = true;
+    }
+    customPlot->yAxis->setRange(0, 1.1*(chartMax+0.01));
     customPlot->replot();
 
     lastMessageTime = QDateTime::currentDateTime();
