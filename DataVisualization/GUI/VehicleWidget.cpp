@@ -25,7 +25,7 @@ VehicleWidget::VehicleWidget(int ID, const QString &name, QWidget *parent) :
 
     for(unsigned i = 0; i < DATA_FIELDS_USED; ++i)
     {
-        ticks << i;
+        ticks << i + 0.5;
         labels << QString::number(i);
     }
 
