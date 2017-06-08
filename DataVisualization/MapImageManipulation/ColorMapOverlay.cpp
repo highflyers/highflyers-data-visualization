@@ -16,6 +16,8 @@ ColorMapOverlay::ColorMapOverlay(DisplayImage *parentImage, BeaconColor beaconCo
     colorMap->data()->setRange(QCPRange(0, 8), QCPRange(0, 8));
 
     image = parentImage->image;
+    width = parentImage->getWidth();
+    height = parentImage->getHeight();
 
     colorScale = new QCPColorScale(customPlot);
     colorMap->setColorScale(colorScale);
@@ -112,11 +114,11 @@ int ColorMapOverlay::absoluteLatitudeToRelative(QGeoCoordinate position)
     return result;
 }
 
-QImage ColorMapOverlay::processData(const Message &message)
+void ColorMapOverlay::processData(const Message &message)
 {
     qDebug();
     /// @todo Implement operations
-    image = parentImage->processData(message);
+    parentImage->processData(message);
     width = image.width();
     height = image.height();
 
@@ -177,6 +179,11 @@ QImage ColorMapOverlay::processData(const Message &message)
         }
     }
 
+}
+
+QImage ColorMapOverlay::rewriteImage()
+{
+    image = parentImage->rewriteImage();
 
     colorMap->setDataRange(QCPRange(colorMapMin, colorMapMax));
 
@@ -197,5 +204,6 @@ QImage ColorMapOverlay::processData(const Message &message)
     painter.end();
 
     image = resultImage;
+
     return image;
 }

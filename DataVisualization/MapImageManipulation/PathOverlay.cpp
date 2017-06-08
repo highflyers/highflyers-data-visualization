@@ -8,6 +8,10 @@ PathOverlay::PathOverlay(DisplayImage *parentImage, QObject *parent) : MapOverla
     customPlot = new QCustomPlot();
     pathCurve = new QCPCurve(customPlot->xAxis, customPlot->yAxis);
 
+    image = parentImage->image;
+    width = image.width();
+    height = image.height();
+
     customPlot->axisRect()->setAutoMargins(QCP::msNone);
     customPlot->axisRect()->setMargins(QMargins(0,0,0,0));
     customPlot->xAxis->grid()->setVisible(false);
@@ -53,13 +57,10 @@ int PathOverlay::absoluteLatitudeToRelative(QGeoCoordinate position)
     return result;
 }
 
-QImage PathOverlay::processData(const Message &message)
+void PathOverlay::processData(const Message &message)
 {
     static unsigned i=0;
-    image = parentImage->processData(message);
-    width = image.width();
-    height = image.height();
-
+    parentImage->processData(message);
 
     customPlot->xAxis->setRange(0, width);
     customPlot->yAxis->setRange(0, height);
@@ -80,24 +81,31 @@ QImage PathOverlay::processData(const Message &message)
             pathData.push_back(QCPCurveData(x, x, y));
             pathCurve->data()->set(pathData, true);
             pathCurve->setPen(QPen(Qt::blue, 5.0));
-            QImage overlayImage = this->toImage();
-
-            QPainter::CompositionMode mode = QPainter::CompositionMode_Multiply;
-
-            QImage resultImage = QImage(width, height, QImage::Format_ARGB32_Premultiplied);
-            QPainter painter(&resultImage);
-            painter.setCompositionMode(QPainter::CompositionMode_Source);
-            painter.fillRect(resultImage.rect(), Qt::transparent);
-            painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-            painter.drawImage(0, 0, overlayImage.scaled(width, height));
-            painter.setCompositionMode(mode);
-            painter.drawImage(0, 0, image.scaled(width, height));
-            painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
-            painter.fillRect(resultImage.rect(), Qt::white);
-            painter.end();
-
-            image = resultImage;
         }
     }
+}
+
+QImage PathOverlay::rewriteImage()
+{
+    image = parentImage->rewriteImage();
+
+    QImage overlayImage = this->toImage();
+
+    QPainter::CompositionMode mode = QPainter::CompositionMode_Multiply;
+
+    QImage resultImage = QImage(width, height, QImage::Format_ARGB32_Premultiplied);
+    QPainter painter(&resultImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
+    painter.fillRect(resultImage.rect(), Qt::transparent);
+    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    painter.drawImage(0, 0, overlayImage.scaled(width, height));
+    painter.setCompositionMode(mode);
+    painter.drawImage(0, 0, image.scaled(width, height));
+    painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+    painter.fillRect(resultImage.rect(), Qt::white);
+    painter.end();
+
+    image = resultImage;
+
     return image;
 }

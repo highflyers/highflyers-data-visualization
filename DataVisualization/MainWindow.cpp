@@ -41,8 +41,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QString logDirName = QFileDialog::getExistingDirectory(this, tr("Select log directory"));
     inputLogger = new DataStorage::InputLogger(logDirName);
 
-    mapImage = mapFragment;
     missionControl = new MissionControl::MissionControl(mapFragment, this);
+
+    mapImage = missionControl->getDisplayImage();
 
     timer = new QTimer(this);
     timer->setSingleShot(false);
@@ -59,7 +60,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(webSocketServer, SIGNAL(statusUpdate(WebSocket::ServerStats)), this->ui->widget_server, SLOT(updateStatus(WebSocket::ServerStats)));
     webSocketServer->emitUpdate();
     connect(this->ui->output, SIGNAL(pointSelected(QGeoCoordinate)), this->ui->widget_coord, SLOT(update(QGeoCoordinate)));
-    connect(missionControl, SIGNAL(newImage(DisplayImage*)), this, SLOT(updateImage(DisplayImage*)));
 }
 
 MainWindow::~MainWindow()
@@ -80,6 +80,8 @@ WebSocket::WebSocketServer *MainWindow::getServer()
 
 void MainWindow::timerTimeout()
 {
+    //missionControl->mapModel->rewriteImage();
+    mapImage->rewriteImage();
     this->ui->output->updateImage(mapImage);
 }
 

@@ -16,7 +16,8 @@ class MapFragment : public DisplayImage
 public:
     explicit MapFragment(QObject *parent = 0);
     ~MapFragment(){}
-    QImage processData(const Message &message);
+    void processData(const Message &message);
+    QImage rewriteImage();
     QPair<QGeoCoordinate, QGeoCoordinate> limits() const;
 
 private:
