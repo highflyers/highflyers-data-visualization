@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QString mapFilename = QFileDialog::getOpenFileName(this, tr("Open map file"),
                                                        "/home",
-                                                       tr(""));
+                                                       tr("*.hf"));
 
     /// @todo Add config file
     mapProvider = new FileMapProvider(mapFilename, mapFilename);
