@@ -21,7 +21,8 @@ public:
 signals:
 
 public slots:
-    virtual QImage processData(const Message &message) = 0;
+    virtual void processData(const Message &message) = 0;
+    virtual QImage rewriteImage() = 0;
 };
 
 #endif // MAPOVERLAY_H

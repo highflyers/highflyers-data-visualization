@@ -30,6 +30,7 @@ public:
     ~MainWindow();
 
     WebSocket::WebSocketServer* getServer();
+    void updateImage(DisplayImage *image);
 
 private:
     const unsigned TIMER_RATE = 1000;
@@ -45,8 +46,6 @@ private:
 private slots:
     void timerTimeout();
 
-public slots:
-    void updateImage(DisplayImage *image);
 };
 
 #endif // MAINWINDOW_H

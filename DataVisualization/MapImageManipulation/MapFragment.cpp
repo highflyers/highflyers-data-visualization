@@ -6,9 +6,13 @@ MapFragment::MapFragment(QObject *parent) : DisplayImage(parent)
 
 }
 
-QImage MapFragment::processData(const Message &message)
+void MapFragment::processData(const Message &message)
 {
     qDebug();
+}
+
+QImage MapFragment::rewriteImage()
+{
     return this->image;
 }
 

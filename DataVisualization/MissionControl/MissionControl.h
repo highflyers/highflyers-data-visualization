@@ -28,13 +28,13 @@ class MissionControl : public QObject
 public:
     explicit MissionControl(DisplayImage *mapFragment, QObject *parent = 0);
 
+    DisplayImage *getDisplayImage();
+
 private:
     QVector<Drone*> drones;
     Drone *getDrone(int ID);
     DisplayImage *mapModel;
 
-signals:
-    void newImage(DisplayImage *image);
 
 public slots:
     void newMessage(const Message &message);

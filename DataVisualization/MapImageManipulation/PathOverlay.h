@@ -26,7 +26,8 @@ private:
 signals:
 
 public slots:
-    QImage processData(const Message &message);
+    void processData(const Message &message);
+    QImage rewriteImage();
 };
 
 #endif // PATHOVERLAY_H

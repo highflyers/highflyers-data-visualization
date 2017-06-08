@@ -9,6 +9,11 @@ MissionControl::MissionControl(DisplayImage *mapFragment, QObject *parent) : QOb
     mapModel = new PathOverlay(new ColorMapOverlay(new ColorMapOverlay(new ColorMapOverlay(new ColorMapOverlay(mapFragment, green), yellow),red), black));
 }
 
+DisplayImage* MissionControl::getDisplayImage()
+{
+    return mapModel;
+}
+
 void MissionControl::newMessage(const Message &message)
 {
     qDebug() << message.toString();
@@ -18,7 +23,6 @@ void MissionControl::newMessage(const Message &message)
         if(drone->name == message.name)
         {
             mapModel->processData(message);
-            emit newImage(mapModel);
         }
         else
         {
