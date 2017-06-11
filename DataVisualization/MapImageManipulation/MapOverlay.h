@@ -7,6 +7,13 @@
 #include <Message.h>
 #include <MapImageManipulation/DisplayImage.h>
 
+enum BeaconColor{
+    green = 0,
+    red = 1,
+    yellow = 2,
+    black = 3
+};
+
 /**
  * @brief Interface for map overlays
  */

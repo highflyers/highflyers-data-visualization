@@ -8,6 +8,7 @@
 #include <MapImageManipulation/MapFragment.h>
 #include <MapImageManipulation/ColorMapOverlay.h>
 #include <MapImageManipulation/PathOverlay.h>
+#include <MapImageManipulation/DotOverlay.h>
 
 #include <GUI/VehicleWidget.h>
 
