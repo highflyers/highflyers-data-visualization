@@ -26,22 +26,22 @@ DotOverlay::DotOverlay(DisplayImage *parentImage, BeaconColor beaconColor, QObje
         case green:
             gradient = new QCPColorGradient();
             gradient->setColorStopAt(0, QColor(0,255,0,0));
-            gradient->setColorStopAt(0.5, QColor(0,255,0,127));
+            gradient->setColorStopAt(0.2, QColor(0,255,0,127));
             gradient->setColorStopAt(1, QColor(0,255,0,255));
             colorMap->setGradient(gradient->inverted());
             break;
         case red:
             gradient = new QCPColorGradient();
             gradient->setColorStopAt(0, QColor(255,0,0,0));
-            gradient->setColorStopAt(0.5, QColor(255,0,0,127));
+            gradient->setColorStopAt(0.2, QColor(255,0,0,127));
             gradient->setColorStopAt(1, QColor(255,0,0,255));
             colorMap->setGradient(gradient->inverted());
             break;
         case yellow:
             gradient = new QCPColorGradient();
-            gradient->setColorStopAt(0, QColor(0,0,255,0));
-            gradient->setColorStopAt(0.5, QColor(0,0,255,127));
-            gradient->setColorStopAt(1, QColor(0,0,255,255));
+            gradient->setColorStopAt(0, QColor(255,200,0,0));
+            gradient->setColorStopAt(0.2, QColor(255,150,0,127));
+            gradient->setColorStopAt(1, QColor(255,200,0,255));
             colorMap->setGradient(gradient->inverted());
             break;
         case black:
@@ -64,12 +64,12 @@ DotOverlay::DotOverlay(DisplayImage *parentImage, BeaconColor beaconColor, QObje
     {
         for (unsigned yIndex = 0; yIndex < parentImage->getHeight(); yIndex += 1)
         {
-            colorMap->data()->setCell(xIndex, yIndex, 1);
+            colorMap->data()->setCell(xIndex, yIndex, 1.0);
         }
     }
 
     colorMapMax = 1.0;
-    colorMapMin = 0.99;
+    colorMapMin = 0.0;
     customPlot->rescaleAxes();
 }
 
@@ -163,7 +163,7 @@ void DotOverlay::processData(const Message &message)
                     it+=2;
                     break;
                 case black:
-                    it+=4;
+                    it+=3;
                     break;
             }
             auto end_it = it+1;
