@@ -25,6 +25,7 @@ public slots:
     virtual void processData(const Message &message) = 0;
     virtual QImage rewriteImage();
     virtual void reset();
+    virtual void setSensitivity(double value);
 
 protected:
     DisplayImage *parentImage;

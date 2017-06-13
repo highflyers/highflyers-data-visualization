@@ -77,3 +77,11 @@ void DisplayImage::reset()
         parentImage->reset();
     }
 }
+
+void DisplayImage::setSensitivity(double value)
+{
+    if(parentImage)
+    {
+        parentImage->setSensitivity(value);
+    }
+}

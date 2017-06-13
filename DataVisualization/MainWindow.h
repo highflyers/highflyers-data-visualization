@@ -47,6 +47,7 @@ private slots:
     void timerTimeout();
 
     void on_pushButton_clicked();
+    void on_horizontalSlider_valueChanged(int value);
 };
 
 #endif // MAINWINDOW_H

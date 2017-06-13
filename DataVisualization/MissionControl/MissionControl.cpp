@@ -47,6 +47,11 @@ void MissionControl::reset()
     mapModel->reset();
 }
 
+void MissionControl::setSensitivity(double value)
+{
+    mapModel->setSensitivity(value);
+}
+
 Drone *MissionControl::getDrone(int ID)
 {
     foreach (Drone *drone, drones) {

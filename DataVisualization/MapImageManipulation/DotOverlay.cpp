@@ -86,6 +86,13 @@ void DotOverlay::reset()
     DisplayImage::reset();
 }
 
+void DotOverlay::setSensitivity(double value)
+{
+    this->sensitivity = value;
+    calculateWithSensitivityAllCells();
+    MapOverlay::setSensitivity(value);
+}
+
 double DotOverlay::rssiNorm(int rssi)
 {
     if(rssi == -200)
@@ -105,6 +112,30 @@ double DotOverlay::distance(int x0, int y0, int x1, int y1)
     double p2 = y1 - y0;
     p2 = p2 * p2;
     return qSqrt(p1 + p2);
+}
+
+double DotOverlay::calculateWithSensitivity(double power)
+{
+    if(power > 1)
+    {
+        power -= SENSITIVITY_OFFSET;
+    }
+    if(power > sensitivity && power <= 1)
+    {
+        power += SENSITIVITY_OFFSET;
+    }
+}
+
+void DotOverlay::calculateWithSensitivityAllCells()
+{
+    for (unsigned xIndex = 0; xIndex < parentImage->getWidth(); xIndex += 1)
+    {
+        for (unsigned yIndex = 0; yIndex < parentImage->getHeight(); yIndex += 1)
+        {
+            double cellValue = colorMap->data()->cell(xIndex, yIndex);
+            colorMap->data()->setCell(xIndex, yIndex, calculateWithSensitivity(cellValue));
+        }
+    }
 }
 
 void DotOverlay::processData(const Message &message)
@@ -148,7 +179,7 @@ void DotOverlay::processData(const Message &message)
                         {
                             if(distance(x,y,ix,iy) < radius)
                             {
-                                colorMap->data()->setCell(ix, iy, qMin(colorMap->data()->cell(ix, iy), power));
+                                colorMap->data()->setCell(ix, iy, qMin(colorMap->data()->cell(ix, iy), calculateWithSensitivity(power)));
                             }
                         }
                     }

@@ -41,6 +41,7 @@ private:
 public slots:
     void newMessage(const Message &message);
     void reset();
+    void setSensitivity(double value);
 };
 
 }

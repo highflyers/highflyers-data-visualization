@@ -58,6 +58,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(webSocketServer, SIGNAL(statusUpdate(WebSocket::ServerStats)), this->ui->widget_server, SLOT(updateStatus(WebSocket::ServerStats)));
     webSocketServer->emitUpdate();
     connect(this->ui->output, SIGNAL(pointSelected(QGeoCoordinate)), this->ui->widget_coord, SLOT(update(QGeoCoordinate)));
+
+    this->ui->horizontalSlider->setValue(100);
 }
 
 MainWindow::~MainWindow()
@@ -92,4 +94,10 @@ void MainWindow::on_pushButton_clicked()
 {
     missionControl->reset();
     timerTimeout();
+}
+
+void MainWindow::on_horizontalSlider_valueChanged(int value)
+{
+    this->ui->label_sensitivity->setText(tr("Czułość") + " (" + QString::number(value) + "%)");
+    missionControl->setSensitivity(value / 100.0);
 }
