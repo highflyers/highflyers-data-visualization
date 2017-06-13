@@ -126,7 +126,7 @@ void DotOverlay::processData(const Message &message)
                     it+=2;
                     break;
                 case black:
-                    it+=3;
+                    it+=4;
                     break;
             }
             auto end_it = it+1;
@@ -134,7 +134,7 @@ void DotOverlay::processData(const Message &message)
                 int rssi = *it;
                 double power = rssiNorm(rssi);
                 if(power>0){
-                    int radius = 0.01 * qMin(getWidth(), getHeight());
+                    int radius = 0.02 * qMin(getWidth(), getHeight()) * (1-power);
                     qDebug() << "power" << power;
                     for(int ix = qMax(0, x - radius); ix < qMin((int)getWidth(), x + radius); ++ix)
                     {
