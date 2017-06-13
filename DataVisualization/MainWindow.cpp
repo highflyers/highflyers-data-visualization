@@ -80,7 +80,10 @@ WebSocket::WebSocketServer *MainWindow::getServer()
 
 void MainWindow::timerTimeout()
 {
-    mapImage = missionControl->getDisplayImage();
+    bool path = false, marks = false;
+    if(this->ui->checkBox_path->checkState() == Qt::Checked) path = true;
+    if(this->ui->checkBox_marks->checkState() == Qt::Checked) marks = true;
+    mapImage = missionControl->getDisplayImage(path, marks);
     mapImage->rewriteImage();
     this->ui->output->updateImage(mapImage);
 }
@@ -98,6 +101,12 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_horizontalSlider_valueChanged(int value)
 {
+
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    int value = this->ui->horizontalSlider->value();
     this->ui->label_sensitivity->setText(tr("Czułość") + " (" + QString::number(value) + "%)");
     missionControl->setSensitivity(value / 100.0);
 }

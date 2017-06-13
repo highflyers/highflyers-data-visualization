@@ -31,11 +31,12 @@ public:
     explicit MissionControl(DisplayImage *mapFragment, QObject *parent = 0);
 
     DisplayImage *getDisplayImage();
+    DisplayImage *getDisplayImage(bool pathPresent, bool marksPresent);
 
 private:
     QVector<Drone*> drones;
     Drone *getDrone(int ID);
-    DisplayImage *mapModel;
+    DisplayImage *fullMapModel, *noPathMap, *noMarksMap, *dotOnlyMap;
 
 
 public slots:

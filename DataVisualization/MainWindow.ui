@@ -49,6 +49,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="pushButton_2">
+        <property name="text">
+         <string>Zatwierdź</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="Line" name="line_2">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -56,14 +63,14 @@
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkBox">
+       <widget class="QCheckBox" name="checkBox_path">
         <property name="text">
          <string>Ścieżka</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkBox_2">
+       <widget class="QCheckBox" name="checkBox_marks">
         <property name="text">
          <string>Oznaczenia</string>
         </property>

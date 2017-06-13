@@ -6,12 +6,35 @@ namespace MissionControl {
 
 MissionControl::MissionControl(DisplayImage *mapFragment, QObject *parent) : QObject(parent)
 {
-    mapModel = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(mapFragment, green), yellow),red), black);
+    fullMapModel = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(mapFragment, green), yellow),red), black);
+    noPathMap = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(mapFragment, green), yellow),red), black);
+    noMarksMap = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(mapFragment, green), yellow),red), black);
+    dotOnlyMap = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(mapFragment, green), yellow),red), black);
 }
 
 DisplayImage* MissionControl::getDisplayImage()
 {
-    return mapModel;
+    return fullMapModel;
+}
+
+DisplayImage *MissionControl::getDisplayImage(bool pathPresent, bool marksPresent)
+{
+    if(!pathPresent && marksPresent)
+    {
+        return noPathMap;
+    }
+    else if(pathPresent && !marksPresent)
+    {
+        return noMarksMap;
+    }
+    else if(!pathPresent && !marksPresent)
+    {
+        return dotOnlyMap;
+    }
+    else
+    {
+        return fullMapModel;
+    }
 }
 
 void MissionControl::newMessage(const Message &message)
@@ -22,7 +45,10 @@ void MissionControl::newMessage(const Message &message)
     {
         if(drone->name == message.name)
         {
-            mapModel->processData(message);
+            fullMapModel->processData(message);
+            noPathMap->processData(message);
+            noMarksMap->processData(message);
+            dotOnlyMap->processData(message);
         }
         else
         {
@@ -36,20 +62,28 @@ void MissionControl::newMessage(const Message &message)
         drone->ID = message.ID;
         drone->name = message.name;
         drones.append(drone);
-        mapModel = new PathOverlay(mapModel, message.ID);
-        mapModel = new CurrentLocationOverlay(mapModel, message.ID);
+        fullMapModel = new PathOverlay(fullMapModel, message.ID);
+        fullMapModel = new CurrentLocationOverlay(fullMapModel, message.ID);
+        noPathMap = new CurrentLocationOverlay(noPathMap, message.ID);
+        noMarksMap = new PathOverlay(noMarksMap, message.ID);
         newMessage(message);
     }
 }
 
 void MissionControl::reset()
 {
-    mapModel->reset();
+    fullMapModel->reset();
+    noPathMap->reset();
+    noMarksMap->reset();
+    dotOnlyMap->reset();
 }
 
 void MissionControl::setSensitivity(double value)
 {
-    mapModel->setSensitivity(value);
+    fullMapModel->setSensitivity(value);
+    noPathMap->setSensitivity(value);
+    noMarksMap->setSensitivity(value);
+    dotOnlyMap->setSensitivity(value);
 }
 
 Drone *MissionControl::getDrone(int ID)
