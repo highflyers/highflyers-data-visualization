@@ -65,6 +65,7 @@ ColorMapOverlay::ColorMapOverlay(DisplayImage *parentImage, BeaconColor beaconCo
     colorMapMax = 1.0;
     colorMapMin = 0.99;
     customPlot->rescaleAxes();
+    customPlot->setBackground(QColor(255,255,255,0));
 }
 
 ColorMapOverlay::~ColorMapOverlay()
@@ -149,27 +150,6 @@ void ColorMapOverlay::processData(const Message &message)
 
 QImage ColorMapOverlay::rewriteImage()
 {
-    image = parentImage->rewriteImage();
-
     colorMap->setDataRange(QCPRange(colorMapMin, colorMapMax));
-
-    QImage overlayImage = this->toImage();
-
-    QPainter::CompositionMode mode = QPainter::CompositionMode_Multiply;
-
-    QImage resultImage = QImage(getWidth(), getHeight(), QImage::Format_ARGB32_Premultiplied);
-    QPainter painter(&resultImage);
-    painter.setCompositionMode(QPainter::CompositionMode_Source);
-    painter.fillRect(resultImage.rect(), Qt::transparent);
-    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    painter.drawImage(0, 0, overlayImage.scaled(getWidth(), getHeight()));
-    painter.setCompositionMode(mode);
-    painter.drawImage(0, 0, image.scaled(getWidth(), getHeight()));
-    painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
-    painter.fillRect(resultImage.rect(), Qt::white);
-    painter.end();
-
-    image = resultImage;
-
-    return image;
+    return MapOverlay::rewriteImage();
 }

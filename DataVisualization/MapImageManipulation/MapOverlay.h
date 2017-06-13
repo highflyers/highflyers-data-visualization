@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QImage>
+#include <QColor>
 
 #include <Message.h>
 #include <MapImageManipulation/DisplayImage.h>
@@ -23,16 +24,14 @@ class MapOverlay : public DisplayImage
 public:
     MapOverlay(DisplayImage *parent);
     virtual ~MapOverlay() {}
-
-signals:
+    static QColor colorOf(int id);
 
 public slots:
-    virtual void processData(const Message &message) = 0;
-    virtual QImage rewriteImage() = 0;
+    virtual void processData(const Message &message);
 
 protected:
-    int absoluteLongitudeToRelative(QGeoCoordinate position);
-    int absoluteLatitudeToRelative(QGeoCoordinate position);
+    virtual int absoluteLongitudeToRelative(QGeoCoordinate position);
+    virtual int absoluteLatitudeToRelative(QGeoCoordinate position);
 };
 
 #endif // MAPOVERLAY_H

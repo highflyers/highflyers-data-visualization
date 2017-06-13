@@ -9,6 +9,7 @@
 #include <MapImageManipulation/ColorMapOverlay.h>
 #include <MapImageManipulation/PathOverlay.h>
 #include <MapImageManipulation/DotOverlay.h>
+#include <MapImageManipulation/CurrentLocationOverlay.h>
 
 #include <GUI/VehicleWidget.h>
 

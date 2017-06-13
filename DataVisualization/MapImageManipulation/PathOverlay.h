@@ -8,7 +8,7 @@ class PathOverlay : public MapOverlay
 {
     Q_OBJECT
 public:
-    PathOverlay(DisplayImage *parentImage);
+    PathOverlay(DisplayImage *parentImage, int droneId);
     ~PathOverlay();
     QImage toImage();
 
@@ -16,10 +16,10 @@ private:
     QCustomPlot *customPlot;
     QCPCurve *pathCurve;
     QVector<QCPCurveData> pathData;
+    int droneId = 0;
 
 public slots:
     void processData(const Message &message);
-    QImage rewriteImage();
 };
 
 #endif // PATHOVERLAY_H

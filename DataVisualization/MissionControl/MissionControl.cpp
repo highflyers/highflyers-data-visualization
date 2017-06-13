@@ -6,7 +6,7 @@ namespace MissionControl {
 
 MissionControl::MissionControl(DisplayImage *mapFragment, QObject *parent) : QObject(parent)
 {
-    mapModel = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new PathOverlay(mapFragment), green), yellow),red), black);
+    mapModel = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(mapFragment, green), yellow),red), black);
 }
 
 DisplayImage* MissionControl::getDisplayImage()
@@ -36,6 +36,8 @@ void MissionControl::newMessage(const Message &message)
         drone->ID = message.ID;
         drone->name = message.name;
         drones.append(drone);
+        mapModel = new PathOverlay(mapModel, message.ID);
+        mapModel = new CurrentLocationOverlay(mapModel, message.ID);
         newMessage(message);
     }
 }

@@ -43,8 +43,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     missionControl = new MissionControl::MissionControl(mapFragment, this);
 
-    mapImage = missionControl->getDisplayImage();
-
     timer = new QTimer(this);
     timer->setSingleShot(false);
     connect(timer, SIGNAL(timeout()), this, SLOT(timerTimeout()));
@@ -80,7 +78,7 @@ WebSocket::WebSocketServer *MainWindow::getServer()
 
 void MainWindow::timerTimeout()
 {
-    //missionControl->mapModel->rewriteImage();
+    mapImage = missionControl->getDisplayImage();
     mapImage->rewriteImage();
     this->ui->output->updateImage(mapImage);
 }

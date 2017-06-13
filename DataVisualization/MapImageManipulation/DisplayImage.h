@@ -23,7 +23,7 @@ public:
 
 public slots:
     virtual void processData(const Message &message) = 0;
-    virtual QImage rewriteImage() = 0;
+    virtual QImage rewriteImage();
     virtual void reset();
 
 protected:
