@@ -44,7 +44,9 @@ SOURCES += main.cpp\
     MissionControl/MissionControl.cpp \
     WebSocket/ServerStats.cpp \
     DataStorage/InputLogger.cpp \
-    MapImageManipulation/DotOverlay.cpp
+    MapImageManipulation/DotOverlay.cpp \
+    MapImageManipulation/CurrentLocationOverlay.cpp \
+    MapImageManipulation/MapOverlay.cpp
 
 HEADERS  += MainWindow.h \
     GUI/MapWidget.h \
@@ -68,7 +70,8 @@ HEADERS  += MainWindow.h \
     MissionControl/MissionControl.h \
     WebSocket/ServerStats.h \
     DataStorage/InputLogger.h \
-    MapImageManipulation/DotOverlay.h
+    MapImageManipulation/DotOverlay.h \
+    MapImageManipulation/CurrentLocationOverlay.h
 
 FORMS    += MainWindow.ui \
     GUI/ServerStatus.ui \

@@ -1,11 +1,7 @@
 #include "DotOverlay.h"
 #include <QDebug>
 
-DotOverlay::DotOverlay(QObject *parent) : MapOverlay(parent)
-{
-}
-
-DotOverlay::DotOverlay(DisplayImage *parentImage, BeaconColor beaconColor, QObject* parent) : MapOverlay(parent), beaconColor(beaconColor), parentImage(parentImage)
+DotOverlay::DotOverlay(DisplayImage *parentImage, BeaconColor beaconColor) : MapOverlay(parentImage), beaconColor(beaconColor)
 {
     customPlot = new QCustomPlot();
     customPlot->axisRect()->setAutoMargins(QCP::msNone);
@@ -15,9 +11,7 @@ DotOverlay::DotOverlay(DisplayImage *parentImage, BeaconColor beaconColor, QObje
     colorMap->data()->setSize(parentImage->getWidth(), parentImage->getHeight());
     colorMap->data()->setRange(QCPRange(0, 8), QCPRange(0, 8));
 
-    image = parentImage->image;
-    width = parentImage->getWidth();
-    height = parentImage->getHeight();
+    image = parentImage->rewriteImage();
 
     colorScale = new QCPColorScale(customPlot);
     colorMap->setColorScale(colorScale);
@@ -57,9 +51,6 @@ DotOverlay::DotOverlay(DisplayImage *parentImage, BeaconColor beaconColor, QObje
             break;
     }
 
-//    QCPColorGradient gradient(QCPColorGradient::gpThermal);
-//    colorMap->setGradient(gradient.inverted());
-
     for (unsigned xIndex = 0; xIndex < parentImage->getWidth(); xIndex += 1)
     {
         for (unsigned yIndex = 0; yIndex < parentImage->getHeight(); yIndex += 1)
@@ -82,25 +73,10 @@ DotOverlay::~DotOverlay()
     delete parentImage;
 }
 
-QPair<QGeoCoordinate, QGeoCoordinate> DotOverlay::limits() const
-{
-    return parentImage->limits();
-}
-
 QImage DotOverlay::toImage()
 {
-    QPixmap mapPixmap = customPlot->toPixmap(width, height);
+    QPixmap mapPixmap = customPlot->toPixmap(getWidth(), getHeight());
     return mapPixmap.toImage();
-}
-
-int DotOverlay::absoluteLongitudeToRelative(QGeoCoordinate position)
-{
-    QPair<QGeoCoordinate, QGeoCoordinate> limits = this->limits();
-    int result = -1;
-    if(position.longitude() > limits.first.longitude() && position.longitude() < limits.second.longitude())
-        result = static_cast<int>(width/(limits.second.longitude() - limits.first.longitude()) * (position.longitude() - limits.first.longitude()));
-
-    return result;
 }
 
 double DotOverlay::rssiNorm(int rssi)
@@ -124,24 +100,10 @@ double DotOverlay::distance(int x0, int y0, int x1, int y1)
     return qSqrt(p1 + p2);
 }
 
-int DotOverlay::absoluteLatitudeToRelative(QGeoCoordinate position)
-{
-    QPair<QGeoCoordinate, QGeoCoordinate> limits = this->limits();
-    int result = -1;
-    double unit = height/(limits.second.latitude() - limits.first.latitude());
-    if(position.latitude() > limits.first.latitude() && position.latitude() < limits.second.latitude())
-        result = static_cast<int>((position.latitude() - limits.first.latitude()) * unit);
-
-    return result;
-}
-
 void DotOverlay::processData(const Message &message)
 {
     qDebug();
-    /// @todo Implement operations
     parentImage->processData(message);
-    width = image.width();
-    height = image.height();
 
     int x=0;
     int y=0;
@@ -171,11 +133,11 @@ void DotOverlay::processData(const Message &message)
                 int rssi = *it;
                 double power = rssiNorm(rssi);
                 if(power>0){
-                    int radius = 0.01 * qMin(width, height);
+                    int radius = 0.01 * qMin(getWidth(), getHeight());
                     qDebug() << "power" << power;
-                    for(int ix = qMax(0, x - radius); ix < qMin((int)width, x + radius); ++ix)
+                    for(int ix = qMax(0, x - radius); ix < qMin((int)getWidth(), x + radius); ++ix)
                     {
-                        for(int iy = qMax(0, y - radius); iy < qMin((int)width, y + radius); ++iy)
+                        for(int iy = qMax(0, y - radius); iy < qMin((int)getHeight(), y + radius); ++iy)
                         {
                             if(distance(x,y,ix,iy) < radius)
                             {
@@ -199,14 +161,14 @@ QImage DotOverlay::rewriteImage()
 
     QPainter::CompositionMode mode = QPainter::CompositionMode_Multiply;
 
-    QImage resultImage = QImage(width, height, QImage::Format_ARGB32_Premultiplied);
+    QImage resultImage = QImage(getWidth(), getHeight(), QImage::Format_ARGB32_Premultiplied);
     QPainter painter(&resultImage);
     painter.setCompositionMode(QPainter::CompositionMode_Source);
     painter.fillRect(resultImage.rect(), Qt::transparent);
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    painter.drawImage(0, 0, overlayImage.scaled(width, height));
+    painter.drawImage(0, 0, overlayImage.scaled(getWidth(), getHeight()));
     painter.setCompositionMode(mode);
-    painter.drawImage(0, 0, image.scaled(width, height));
+    painter.drawImage(0, 0, image.scaled(getWidth(), getHeight()));
     painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
     painter.fillRect(resultImage.rect(), Qt::white);
     painter.end();

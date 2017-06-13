@@ -19,6 +19,10 @@ public:
     void processData(const Message &message);
     QImage rewriteImage();
     QPair<QGeoCoordinate, QGeoCoordinate> limits() const;
+    QImage toImage();
+
+    unsigned getWidth();
+    unsigned getHeight();
 
 private:
     QPair<QGeoCoordinate, QGeoCoordinate> m_limits;

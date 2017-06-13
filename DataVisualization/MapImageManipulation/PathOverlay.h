@@ -8,22 +8,14 @@ class PathOverlay : public MapOverlay
 {
     Q_OBJECT
 public:
-    PathOverlay(DisplayImage *parentImage, QObject *parent = 0);
+    PathOverlay(DisplayImage *parentImage);
     ~PathOverlay();
-    QPair<QGeoCoordinate, QGeoCoordinate> limits() const;
     QImage toImage();
 
 private:
-    DisplayImage *parentImage;
-    unsigned width, height;
     QCustomPlot *customPlot;
     QCPCurve *pathCurve;
     QVector<QCPCurveData> pathData;
-
-    int absoluteLongitudeToRelative(QGeoCoordinate position);
-    int absoluteLatitudeToRelative(QGeoCoordinate position);
-
-signals:
 
 public slots:
     void processData(const Message &message);

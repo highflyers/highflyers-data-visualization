@@ -1,16 +1,51 @@
 #include "DisplayImage.h"
 
-DisplayImage::DisplayImage(QObject *parent) : QObject(parent)
+DisplayImage::DisplayImage(DisplayImage *parentImage) : QObject(parentImage), parentImage(parentImage)
 {
 
 }
 
-double DisplayImage::getWidth()
+QPair<QGeoCoordinate, QGeoCoordinate> DisplayImage::limits() const
 {
-    return image.width();
+    if(parentImage)
+    {
+        return parentImage->limits();
+    }
+    else
+    {
+        QGeoCoordinate coord;
+        return QPair<QGeoCoordinate, QGeoCoordinate>(coord, coord);
+    }
 }
 
-double DisplayImage::getHeight()
+unsigned DisplayImage::getWidth()
 {
-    return image.height();
+    if(parentImage)
+    {
+        return parentImage->getWidth();
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+unsigned DisplayImage::getHeight()
+{
+    if(parentImage)
+    {
+        return parentImage->getHeight();
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+void DisplayImage::reset()
+{
+    if(parentImage)
+    {
+        parentImage->reset();
+    }
 }

@@ -1,11 +1,7 @@
 #include "ColorMapOverlay.h"
 #include <QDebug>
 
-ColorMapOverlay::ColorMapOverlay(QObject *parent) : MapOverlay(parent)
-{
-}
-
-ColorMapOverlay::ColorMapOverlay(DisplayImage *parentImage, BeaconColor beaconColor, QObject* parent) : MapOverlay(parent), beaconColor(beaconColor), parentImage(parentImage)
+ColorMapOverlay::ColorMapOverlay(DisplayImage *parentImage, BeaconColor beaconColor) : MapOverlay(parentImage), beaconColor(beaconColor)
 {
     customPlot = new QCustomPlot();
     customPlot->axisRect()->setAutoMargins(QCP::msNone);
@@ -16,8 +12,6 @@ ColorMapOverlay::ColorMapOverlay(DisplayImage *parentImage, BeaconColor beaconCo
     colorMap->data()->setRange(QCPRange(0, 8), QCPRange(0, 8));
 
     image = parentImage->image;
-    width = parentImage->getWidth();
-    height = parentImage->getHeight();
 
     colorScale = new QCPColorScale(customPlot);
     colorMap->setColorScale(colorScale);
@@ -82,36 +76,10 @@ ColorMapOverlay::~ColorMapOverlay()
     delete parentImage;
 }
 
-QPair<QGeoCoordinate, QGeoCoordinate> ColorMapOverlay::limits() const
-{
-    return parentImage->limits();
-}
-
 QImage ColorMapOverlay::toImage()
 {
-    QPixmap mapPixmap = customPlot->toPixmap(width, height);
+    QPixmap mapPixmap = customPlot->toPixmap(getWidth(), getHeight());
     return mapPixmap.toImage();
-}
-
-int ColorMapOverlay::absoluteLongitudeToRelative(QGeoCoordinate position)
-{
-    QPair<QGeoCoordinate, QGeoCoordinate> limits = this->limits();
-    int result = -1;
-    if(position.longitude() > limits.first.longitude() && position.longitude() < limits.second.longitude())
-        result = static_cast<int>(width/(limits.second.longitude() - limits.first.longitude()) * (position.longitude() - limits.first.longitude()));
-
-    return result;
-}
-
-int ColorMapOverlay::absoluteLatitudeToRelative(QGeoCoordinate position)
-{
-    QPair<QGeoCoordinate, QGeoCoordinate> limits = this->limits();
-    int result = -1;
-    double unit = height/(limits.second.latitude() - limits.first.latitude());
-    if(position.latitude() > limits.first.latitude() && position.latitude() < limits.second.latitude())
-        result = static_cast<int>((position.latitude() - limits.first.latitude()) * unit);
-
-    return result;
 }
 
 void ColorMapOverlay::processData(const Message &message)
@@ -119,8 +87,6 @@ void ColorMapOverlay::processData(const Message &message)
     qDebug();
     /// @todo Implement operations
     parentImage->processData(message);
-    width = image.width();
-    height = image.height();
 
     int x=0;
     int y=0;
@@ -149,9 +115,9 @@ void ColorMapOverlay::processData(const Message &message)
             for(it; it!=end_it; ++it){
                 int radius = *it;
                 if(radius>0){
-                    for (unsigned xIndex = 0; xIndex < width; xIndex += 1)
+                    for (unsigned xIndex = 0; xIndex < getWidth(); xIndex += 1)
                     {
-                        for (unsigned yIndex = 0; yIndex < height; yIndex += 1)
+                        for (unsigned yIndex = 0; yIndex < getHeight(); yIndex += 1)
                         {
                             double z;
                             int left = (xIndex-x)*(xIndex-x) + (yIndex-y)*(yIndex-y);
@@ -191,14 +157,14 @@ QImage ColorMapOverlay::rewriteImage()
 
     QPainter::CompositionMode mode = QPainter::CompositionMode_Multiply;
 
-    QImage resultImage = QImage(width, height, QImage::Format_ARGB32_Premultiplied);
+    QImage resultImage = QImage(getWidth(), getHeight(), QImage::Format_ARGB32_Premultiplied);
     QPainter painter(&resultImage);
     painter.setCompositionMode(QPainter::CompositionMode_Source);
     painter.fillRect(resultImage.rect(), Qt::transparent);
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    painter.drawImage(0, 0, overlayImage.scaled(width, height));
+    painter.drawImage(0, 0, overlayImage.scaled(getWidth(), getHeight()));
     painter.setCompositionMode(mode);
-    painter.drawImage(0, 0, image.scaled(width, height));
+    painter.drawImage(0, 0, image.scaled(getWidth(), getHeight()));
     painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
     painter.fillRect(resultImage.rect(), Qt::white);
     painter.end();

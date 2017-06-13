@@ -11,20 +11,25 @@ class DisplayImage : public QObject
 {
     Q_OBJECT
 public:
-    explicit DisplayImage(QObject *parent = 0);
-    virtual ~DisplayImage(){}
-
-    virtual QPair<QGeoCoordinate, QGeoCoordinate> limits() const = 0;
     QImage image;
 
-    double getWidth();
-    double getHeight();
+    explicit DisplayImage(DisplayImage *parentImage);
+    virtual ~DisplayImage(){}
 
-signals:
+    virtual QPair<QGeoCoordinate, QGeoCoordinate> limits() const;
+
+    virtual unsigned getWidth();
+    virtual unsigned getHeight();
 
 public slots:
     virtual void processData(const Message &message) = 0;
     virtual QImage rewriteImage() = 0;
+    virtual void reset();
+
+protected:
+    DisplayImage *parentImage;
+
+    virtual QImage toImage() = 0;
 };
 
 #endif // DISPLAYIMAGE_H

@@ -21,15 +21,18 @@ class MapOverlay : public DisplayImage
 {
     Q_OBJECT
 public:
-    explicit MapOverlay(QObject *parent = 0) : DisplayImage(parent) {}
+    MapOverlay(DisplayImage *parent);
     virtual ~MapOverlay() {}
 
-    virtual QImage toImage() = 0;
 signals:
 
 public slots:
     virtual void processData(const Message &message) = 0;
     virtual QImage rewriteImage() = 0;
+
+protected:
+    int absoluteLongitudeToRelative(QGeoCoordinate position);
+    int absoluteLatitudeToRelative(QGeoCoordinate position);
 };
 
 #endif // MAPOVERLAY_H
