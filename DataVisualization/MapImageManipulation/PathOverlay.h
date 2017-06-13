@@ -11,6 +11,7 @@ public:
     PathOverlay(DisplayImage *parentImage, int droneId);
     ~PathOverlay();
     QImage toImage();
+    void reset();
 
 private:
     QCustomPlot *customPlot;

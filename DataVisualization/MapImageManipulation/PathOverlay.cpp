@@ -30,6 +30,13 @@ QImage PathOverlay::toImage()
     return mapPixmap.toImage();
 }
 
+void PathOverlay::reset()
+{
+    pathData.clear();
+    pathCurve->data()->set(pathData, true);
+    DisplayImage::reset();
+}
+
 void PathOverlay::processData(const Message &message)
 {
     if(message.ID == droneId)

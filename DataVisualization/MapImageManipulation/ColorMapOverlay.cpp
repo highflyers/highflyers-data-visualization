@@ -51,19 +51,10 @@ ColorMapOverlay::ColorMapOverlay(DisplayImage *parentImage, BeaconColor beaconCo
             break;
     }
 
-//    QCPColorGradient gradient(QCPColorGradient::gpThermal);
-//    colorMap->setGradient(gradient.inverted());
-
-    for (unsigned xIndex = 0; xIndex < parentImage->getWidth(); xIndex += 1)
-    {
-        for (unsigned yIndex = 0; yIndex < parentImage->getHeight(); yIndex += 1)
-        {
-            colorMap->data()->setCell(xIndex, yIndex, 1);
-        }
-    }
+    reset();
 
     colorMapMax = 1.0;
-    colorMapMin = 0.99;
+    colorMapMin = 0.0;
     customPlot->rescaleAxes();
     customPlot->setBackground(QColor(255,255,255,0));
 }
@@ -81,6 +72,17 @@ QImage ColorMapOverlay::toImage()
 {
     QPixmap mapPixmap = customPlot->toPixmap(getWidth(), getHeight());
     return mapPixmap.toImage();
+}
+
+void ColorMapOverlay::reset()
+{
+    for (unsigned xIndex = 0; xIndex < parentImage->getWidth(); xIndex += 1)
+    {
+        for (unsigned yIndex = 0; yIndex < parentImage->getHeight(); yIndex += 1)
+        {
+            colorMap->data()->setCell(xIndex, yIndex, 1);
+        }
+    }
 }
 
 void ColorMapOverlay::processData(const Message &message)

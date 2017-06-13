@@ -51,13 +51,7 @@ DotOverlay::DotOverlay(DisplayImage *parentImage, BeaconColor beaconColor) : Map
             break;
     }
 
-    for (unsigned xIndex = 0; xIndex < parentImage->getWidth(); xIndex += 1)
-    {
-        for (unsigned yIndex = 0; yIndex < parentImage->getHeight(); yIndex += 1)
-        {
-            colorMap->data()->setCell(xIndex, yIndex, 1.0);
-        }
-    }
+    reset();
 
     colorMapMax = 1.0;
     colorMapMin = 0.0;
@@ -78,6 +72,18 @@ QImage DotOverlay::toImage()
 {
     QPixmap mapPixmap = customPlot->toPixmap(getWidth(), getHeight());
     return mapPixmap.toImage();
+}
+
+void DotOverlay::reset()
+{
+    for (unsigned xIndex = 0; xIndex < parentImage->getWidth(); xIndex += 1)
+    {
+        for (unsigned yIndex = 0; yIndex < parentImage->getHeight(); yIndex += 1)
+        {
+            colorMap->data()->setCell(xIndex, yIndex, 1.0);
+        }
+    }
+    DisplayImage::reset();
 }
 
 double DotOverlay::rssiNorm(int rssi)

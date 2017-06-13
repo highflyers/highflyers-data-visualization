@@ -87,3 +87,9 @@ void MainWindow::updateImage(DisplayImage *image)
 {
     this->mapImage = image;
 }
+
+void MainWindow::on_pushButton_clicked()
+{
+    missionControl->reset();
+    timerTimeout();
+}

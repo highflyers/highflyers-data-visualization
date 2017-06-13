@@ -42,6 +42,11 @@ void MissionControl::newMessage(const Message &message)
     }
 }
 
+void MissionControl::reset()
+{
+    mapModel->reset();
+}
+
 Drone *MissionControl::getDrone(int ID)
 {
     foreach (Drone *drone, drones) {

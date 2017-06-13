@@ -16,6 +16,7 @@ public:
     ~ColorMapOverlay();
 
     QImage toImage();
+    void reset();
 
 private:
     QCustomPlot *customPlot;

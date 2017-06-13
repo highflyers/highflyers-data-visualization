@@ -12,6 +12,7 @@ public:
     ~DotOverlay();
 
     QImage toImage();
+    void reset();
 
 private:
     QCustomPlot *customPlot;
