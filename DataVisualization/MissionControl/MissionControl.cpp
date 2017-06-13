@@ -6,7 +6,7 @@ namespace MissionControl {
 
 MissionControl::MissionControl(DisplayImage *mapFragment, QObject *parent) : QObject(parent)
 {
-    mapModel = new PathOverlay(new ColorMapOverlay(new ColorMapOverlay(new ColorMapOverlay(new ColorMapOverlay(mapFragment, green), yellow),red), black));
+    mapModel = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new PathOverlay(mapFragment), green), yellow),red), black);
 }
 
 DisplayImage* MissionControl::getDisplayImage()

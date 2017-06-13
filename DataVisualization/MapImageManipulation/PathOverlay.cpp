@@ -80,7 +80,7 @@ void PathOverlay::processData(const Message &message)
             qDebug() << "y: " << y;
             pathData.push_back(QCPCurveData(x, x, y));
             pathCurve->data()->set(pathData, true);
-            pathCurve->setPen(QPen(Qt::blue, 5.0));
+            pathCurve->setPen(QPen(Qt::blue, 2.0));
         }
     }
 }

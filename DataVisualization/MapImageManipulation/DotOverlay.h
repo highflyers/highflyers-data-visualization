@@ -1,20 +1,16 @@
-#ifndef COLORMAPOVERLAY_H
-#define COLORMAPOVERLAY_H
+#ifndef DOTOVERLAY_H
+#define DOTOVERLAY_H
 
-#include <QObject>
-
-#include <MapImageManipulation/MapOverlay.h>
-#include <MapImageManipulation/DisplayImage.h>
 #include <qcustomplot.h>
 #include <MapImageManipulation/MapOverlay.h>
 
-class ColorMapOverlay : public MapOverlay
+class DotOverlay : public MapOverlay
 {
     Q_OBJECT
 public:
-    explicit ColorMapOverlay(QObject *parent = 0);
-    ColorMapOverlay(DisplayImage *parentImage, BeaconColor beaconColor, QObject *parent = 0);
-    ~ColorMapOverlay();
+    explicit DotOverlay(QObject *parent = 0);
+    DotOverlay(DisplayImage *parentImage, BeaconColor beaconColor, QObject *parent = 0);
+    ~DotOverlay();
 
     QPair<QGeoCoordinate, QGeoCoordinate> limits() const;
 
@@ -32,13 +28,15 @@ private:
     double colorMapMin;
 
     int absoluteLatitudeToRelative(QGeoCoordinate position);
-    int absoluteLongitudeToRelative(QGeoCoordinate position);  
+    int absoluteLongitudeToRelative(QGeoCoordinate position);
+
+    double rssiNorm(int rssi);
+    double distance(int x0, int y0, int x1, int y1);
 signals:
 
 public slots:
     void processData(const Message &message);
     QImage rewriteImage();
-
 };
 
-#endif // COLORMAPOVERLAY_H
+#endif // DOTOVERLAY_H
