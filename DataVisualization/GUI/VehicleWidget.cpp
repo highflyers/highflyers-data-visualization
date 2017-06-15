@@ -11,7 +11,6 @@ VehicleWidget::VehicleWidget(int ID, const QString &name, QWidget *parent) :
     ui(new Ui::VehicleWidget)
 {
     ui->setupUi(this);
-    this->ui->label_name->setText(name);
     this->ui->groupBox->setTitle(QString::number(ID));
 
     customPlot = this->ui->chart;
@@ -52,7 +51,9 @@ VehicleWidget::~VehicleWidget()
 void VehicleWidget::newMessage(const Message &message)
 {
     qDebug();
-    this->ui->label_pos->setText(message.position.toString().replace(',', '\n'));
+    this->ui->groupBox->setTitle(QString::number(message.ID) + " - " + message.name);
+//    this->ui->label_pos->setText(message.position.toString().replace(',', '\n'));
+    this->ui->label_pos->setText(message.position.toString());
 
     double localMin = *std::min_element(message.data.begin(), message.data.end());
     if(chartMinMaxSet)
@@ -90,7 +91,16 @@ void VehicleWidget::newMessage(const Message &message)
 void VehicleWidget::updateTime()
 {
     QDateTime currentTime = QDateTime::currentDateTime();
-    this->ui->label_last_message->setText(QString::number(lastMessageTime.time().msecsTo(currentTime.time()) / 1000.0) + " s");
+    double timeDiff = lastMessageTime.time().msecsTo(currentTime.time()) / 1000.0;
+    this->ui->label_last_message->setText(QString::number(timeDiff) + " s");
+    if(timeDiff > timeThreshold)
+    {
+        this->ui->label_last_message->setStyleSheet(TIME_TEXT_LATE);
+    }
+    else
+    {
+        this->ui->label_last_message->setStyleSheet(TIME_TEXT_NORMAL);
+    }
 }
 
 void VehicleWidget::chartClicked()

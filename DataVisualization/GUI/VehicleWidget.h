@@ -41,6 +41,11 @@ private:
     bool chartMinMaxSet = false;
     double chartMin, chartMax;
 
+    const unsigned timeThreshold = 10;
+    const QString TIME_TEXT_NORMAL = "";
+    const QString TIME_TEXT_LATE = "QLabel { background-color : red; color : black; }";
+
+
 private slots:
     void updateTime();
     void chartClicked();
