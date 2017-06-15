@@ -43,8 +43,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     missionControl = new MissionControl::MissionControl(mapFragment, this);
 
-    mapImage = missionControl->getDisplayImage();
-
     timer = new QTimer(this);
     timer->setSingleShot(false);
     connect(timer, SIGNAL(timeout()), this, SLOT(timerTimeout()));
@@ -60,6 +58,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(webSocketServer, SIGNAL(statusUpdate(WebSocket::ServerStats)), this->ui->widget_server, SLOT(updateStatus(WebSocket::ServerStats)));
     webSocketServer->emitUpdate();
     connect(this->ui->output, SIGNAL(pointSelected(QGeoCoordinate)), this->ui->widget_coord, SLOT(update(QGeoCoordinate)));
+
+    this->ui->horizontalSlider->setValue(100);
 }
 
 MainWindow::~MainWindow()
@@ -80,7 +80,10 @@ WebSocket::WebSocketServer *MainWindow::getServer()
 
 void MainWindow::timerTimeout()
 {
-    //missionControl->mapModel->rewriteImage();
+    bool path = false, marks = false;
+    if(this->ui->checkBox_path->checkState() == Qt::Checked) path = true;
+    if(this->ui->checkBox_marks->checkState() == Qt::Checked) marks = true;
+    mapImage = missionControl->getDisplayImage(path, marks);
     mapImage->rewriteImage();
     this->ui->output->updateImage(mapImage);
 }
@@ -88,4 +91,22 @@ void MainWindow::timerTimeout()
 void MainWindow::updateImage(DisplayImage *image)
 {
     this->mapImage = image;
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    missionControl->reset();
+    timerTimeout();
+}
+
+void MainWindow::on_horizontalSlider_valueChanged(int value)
+{
+
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    int value = this->ui->horizontalSlider->value();
+    this->ui->label_sensitivity->setText(tr("Czułość") + " (" + QString::number(value) + "%)");
+    missionControl->setSensitivity(value / 100.0);
 }

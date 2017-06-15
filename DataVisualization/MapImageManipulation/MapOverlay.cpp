@@ -4,6 +4,28 @@ MapOverlay::MapOverlay(DisplayImage *parent) : DisplayImage(parent)
 {
 }
 
+QColor MapOverlay::colorOf(int id)
+{
+    id = id % 3;
+    switch (id) {
+    case 0:
+        return QColor(0,0,0,127);
+        break;
+    case 1:
+        return QColor(0,0,255,127);
+        break;
+    case 2:
+        return QColor(255,0,255,127);
+    default:
+        break;
+    }
+}
+
+void MapOverlay::processData(const Message &message)
+{
+    parentImage->processData(message);
+}
+
 int MapOverlay::absoluteLongitudeToRelative(QGeoCoordinate position)
 {
     QPair<QGeoCoordinate, QGeoCoordinate> limits = this->limits();
@@ -24,3 +46,4 @@ int MapOverlay::absoluteLatitudeToRelative(QGeoCoordinate position)
 
     return result;
 }
+

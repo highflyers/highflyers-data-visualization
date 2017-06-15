@@ -12,6 +12,8 @@ public:
     ~DotOverlay();
 
     QImage toImage();
+    void reset();
+    void setSensitivity(double value);
 
 private:
     QCustomPlot *customPlot;
@@ -21,9 +23,14 @@ private:
     BeaconColor beaconColor;
     double colorMapMax;
     double colorMapMin;
+    double sensitivity = 1.0;
+    const double SENSITIVITY_OFFSET = 10;
 
     double rssiNorm(int rssi);
     double distance(int x0, int y0, int x1, int y1);
+
+    double calculateWithSensitivity(double power);
+    void calculateWithSensitivityAllCells();
 
 public slots:
     void processData(const Message &message);

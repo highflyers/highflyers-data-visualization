@@ -9,6 +9,7 @@
 #include <MapImageManipulation/ColorMapOverlay.h>
 #include <MapImageManipulation/PathOverlay.h>
 #include <MapImageManipulation/DotOverlay.h>
+#include <MapImageManipulation/CurrentLocationOverlay.h>
 
 #include <GUI/VehicleWidget.h>
 
@@ -30,15 +31,18 @@ public:
     explicit MissionControl(DisplayImage *mapFragment, QObject *parent = 0);
 
     DisplayImage *getDisplayImage();
+    DisplayImage *getDisplayImage(bool pathPresent, bool marksPresent);
 
 private:
     QVector<Drone*> drones;
     Drone *getDrone(int ID);
-    DisplayImage *mapModel;
+    DisplayImage *fullMapModel, *noPathMap, *noMarksMap, *dotOnlyMap;
 
 
 public slots:
     void newMessage(const Message &message);
+    void reset();
+    void setSensitivity(double value);
 };
 
 }

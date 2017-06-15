@@ -3,7 +3,7 @@
 #include <QtCore>
 #include <QDebug>
 
-PathOverlay::PathOverlay(DisplayImage *parentImage) : MapOverlay(parentImage)
+PathOverlay::PathOverlay(DisplayImage *parentImage, int droneId) : MapOverlay(parentImage), droneId(droneId)
 {
     customPlot = new QCustomPlot();
     pathCurve = new QCPCurve(customPlot->xAxis, customPlot->yAxis);
@@ -14,6 +14,7 @@ PathOverlay::PathOverlay(DisplayImage *parentImage) : MapOverlay(parentImage)
     customPlot->axisRect()->setMargins(QMargins(0,0,0,0));
     customPlot->xAxis->grid()->setVisible(false);
     customPlot->yAxis->grid()->setVisible(false);
+    customPlot->setBackground(QColor(255,255,255,0));
 }
 
 PathOverlay::~PathOverlay()
@@ -29,48 +30,31 @@ QImage PathOverlay::toImage()
     return mapPixmap.toImage();
 }
 
-void PathOverlay::processData(const Message &message)
+void PathOverlay::reset()
 {
-    static unsigned i=0;
-    parentImage->processData(message);
-
-    customPlot->xAxis->setRange(0, getWidth());
-    customPlot->yAxis->setRange(0, getHeight());
-    int x = 0;
-    int y = 0;
-
-    if((x = absoluteLongitudeToRelative(message.position)) != -1){
-        qDebug() << "x: " << x;
-        if((y = absoluteLatitudeToRelative(message.position)) != -1){
-            qDebug() << "y: " << y;
-            pathData.push_back(QCPCurveData(x, x, y));
-            pathCurve->data()->set(pathData, true);
-            pathCurve->setPen(QPen(Qt::blue, 2.0));
-        }
-    }
+    pathData.clear();
+    pathCurve->data()->set(pathData, true);
+    DisplayImage::reset();
 }
 
-QImage PathOverlay::rewriteImage()
+void PathOverlay::processData(const Message &message)
 {
-    image = parentImage->rewriteImage();
+    if(message.ID == droneId)
+    {
+        customPlot->xAxis->setRange(0, getWidth());
+        customPlot->yAxis->setRange(0, getHeight());
+        int x = 0;
+        int y = 0;
 
-    QImage overlayImage = this->toImage();
-
-    QPainter::CompositionMode mode = QPainter::CompositionMode_Multiply;
-
-    QImage resultImage = QImage(getWidth(), getHeight(), QImage::Format_ARGB32_Premultiplied);
-    QPainter painter(&resultImage);
-    painter.setCompositionMode(QPainter::CompositionMode_Source);
-    painter.fillRect(resultImage.rect(), Qt::transparent);
-    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    painter.drawImage(0, 0, overlayImage.scaled(getWidth(), getHeight()));
-    painter.setCompositionMode(mode);
-    painter.drawImage(0, 0, image.scaled(getWidth(), getHeight()));
-    painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
-    painter.fillRect(resultImage.rect(), Qt::white);
-    painter.end();
-
-    image = resultImage;
-
-    return image;
+        if((x = absoluteLongitudeToRelative(message.position)) != -1){
+            qDebug() << "x: " << x;
+            if((y = absoluteLatitudeToRelative(message.position)) != -1){
+                qDebug() << "y: " << y;
+                pathData.push_back(QCPCurveData(x, x, y));
+                pathCurve->data()->set(pathData, true);
+                pathCurve->setPen(QPen(MapOverlay::colorOf(message.ID), 2.0));
+            }
+        }
+    }
+    MapOverlay::processData(message);
 }

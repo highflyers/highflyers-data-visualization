@@ -51,17 +51,12 @@ DotOverlay::DotOverlay(DisplayImage *parentImage, BeaconColor beaconColor) : Map
             break;
     }
 
-    for (unsigned xIndex = 0; xIndex < parentImage->getWidth(); xIndex += 1)
-    {
-        for (unsigned yIndex = 0; yIndex < parentImage->getHeight(); yIndex += 1)
-        {
-            colorMap->data()->setCell(xIndex, yIndex, 1.0);
-        }
-    }
+    reset();
 
     colorMapMax = 1.0;
     colorMapMin = 0.0;
     customPlot->rescaleAxes();
+    customPlot->setBackground(QColor(255,255,255,0));
 }
 
 DotOverlay::~DotOverlay()
@@ -77,6 +72,25 @@ QImage DotOverlay::toImage()
 {
     QPixmap mapPixmap = customPlot->toPixmap(getWidth(), getHeight());
     return mapPixmap.toImage();
+}
+
+void DotOverlay::reset()
+{
+    for (unsigned xIndex = 0; xIndex < parentImage->getWidth(); xIndex += 1)
+    {
+        for (unsigned yIndex = 0; yIndex < parentImage->getHeight(); yIndex += 1)
+        {
+            colorMap->data()->setCell(xIndex, yIndex, 1.0);
+        }
+    }
+    DisplayImage::reset();
+}
+
+void DotOverlay::setSensitivity(double value)
+{
+    this->sensitivity = value;
+    calculateWithSensitivityAllCells();
+    MapOverlay::setSensitivity(value);
 }
 
 double DotOverlay::rssiNorm(int rssi)
@@ -98,6 +112,30 @@ double DotOverlay::distance(int x0, int y0, int x1, int y1)
     double p2 = y1 - y0;
     p2 = p2 * p2;
     return qSqrt(p1 + p2);
+}
+
+double DotOverlay::calculateWithSensitivity(double power)
+{
+    if(power > 1)
+    {
+        power -= SENSITIVITY_OFFSET;
+    }
+    if(power > sensitivity && power <= 1)
+    {
+        power += SENSITIVITY_OFFSET;
+    }
+}
+
+void DotOverlay::calculateWithSensitivityAllCells()
+{
+    for (unsigned xIndex = 0; xIndex < parentImage->getWidth(); xIndex += 1)
+    {
+        for (unsigned yIndex = 0; yIndex < parentImage->getHeight(); yIndex += 1)
+        {
+            double cellValue = colorMap->data()->cell(xIndex, yIndex);
+            colorMap->data()->setCell(xIndex, yIndex, calculateWithSensitivity(cellValue));
+        }
+    }
 }
 
 void DotOverlay::processData(const Message &message)
@@ -125,7 +163,7 @@ void DotOverlay::processData(const Message &message)
                     it+=2;
                     break;
                 case black:
-                    it+=3;
+                    it+=4;
                     break;
             }
             auto end_it = it+1;
@@ -133,7 +171,7 @@ void DotOverlay::processData(const Message &message)
                 int rssi = *it;
                 double power = rssiNorm(rssi);
                 if(power>0){
-                    int radius = 0.01 * qMin(getWidth(), getHeight());
+                    int radius = 0.02 * qMin(getWidth(), getHeight()) * (1-power);
                     qDebug() << "power" << power;
                     for(int ix = qMax(0, x - radius); ix < qMin((int)getWidth(), x + radius); ++ix)
                     {
@@ -141,7 +179,7 @@ void DotOverlay::processData(const Message &message)
                         {
                             if(distance(x,y,ix,iy) < radius)
                             {
-                                colorMap->data()->setCell(ix, iy, qMin(colorMap->data()->cell(ix, iy), power));
+                                colorMap->data()->setCell(ix, iy, qMin(colorMap->data()->cell(ix, iy), calculateWithSensitivity(power)));
                             }
                         }
                     }
@@ -153,27 +191,6 @@ void DotOverlay::processData(const Message &message)
 
 QImage DotOverlay::rewriteImage()
 {
-    image = parentImage->rewriteImage();
-
     colorMap->setDataRange(QCPRange(colorMapMin, colorMapMax));
-
-    QImage overlayImage = this->toImage();
-
-    QPainter::CompositionMode mode = QPainter::CompositionMode_Multiply;
-
-    QImage resultImage = QImage(getWidth(), getHeight(), QImage::Format_ARGB32_Premultiplied);
-    QPainter painter(&resultImage);
-    painter.setCompositionMode(QPainter::CompositionMode_Source);
-    painter.fillRect(resultImage.rect(), Qt::transparent);
-    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    painter.drawImage(0, 0, overlayImage.scaled(getWidth(), getHeight()));
-    painter.setCompositionMode(mode);
-    painter.drawImage(0, 0, image.scaled(getWidth(), getHeight()));
-    painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
-    painter.fillRect(resultImage.rect(), Qt::white);
-    painter.end();
-
-    image = resultImage;
-
-    return image;
+    return MapOverlay::rewriteImage();
 }
