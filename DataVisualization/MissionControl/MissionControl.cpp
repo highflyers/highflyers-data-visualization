@@ -6,10 +6,10 @@ namespace MissionControl {
 
 MissionControl::MissionControl(DisplayImage *mapFragment, QObject *parent) : QObject(parent)
 {
-    fullMapModel = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(mapFragment, green), yellow),red), black);
-    noPathMap = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(mapFragment, green), yellow),red), black);
-    noMarksMap = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(mapFragment, green), yellow),red), black);
-    dotOnlyMap = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(mapFragment, green), yellow),red), black);
+    fullMapModel = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(mapFragment, green, 7), green, 8), yellow, 4), yellow, 5), yellow, 6),red, 0), red, 1), red, 2), red, 3), black, 9);
+    noPathMap = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(mapFragment, green, 7), green, 8), yellow, 4), yellow, 5), yellow, 6),red, 0), red, 1), red, 2), red, 3), black, 9);
+    noMarksMap = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(mapFragment, green, 7), green, 8), yellow, 4), yellow, 5), yellow, 6),red, 0), red, 1), red, 2), red, 3), black, 9);
+    dotOnlyMap = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(mapFragment, green, 7), green, 8), yellow, 4), yellow, 5), yellow, 6),red, 0), red, 1), red, 2), red, 3), black, 9);
 }
 
 DisplayImage* MissionControl::getDisplayImage()
@@ -84,6 +84,14 @@ void MissionControl::setSensitivity(double value)
     noPathMap->setSensitivity(value);
     noMarksMap->setSensitivity(value);
     dotOnlyMap->setSensitivity(value);
+}
+
+void MissionControl::filter(QVector<bool> filter)
+{
+    fullMapModel->filter(filter);
+    noPathMap->filter(filter);
+    noMarksMap->filter(filter);
+    dotOnlyMap->filter(filter);
 }
 
 Drone *MissionControl::getDrone(int ID)

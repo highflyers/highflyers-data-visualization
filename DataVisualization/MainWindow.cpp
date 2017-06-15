@@ -42,6 +42,10 @@ MainWindow::MainWindow(QWidget *parent) :
     inputLogger = new DataStorage::InputLogger(logDirName);
 
     missionControl = new MissionControl::MissionControl(mapFragment, this);
+    QVector<bool> test(10, true);
+    auto it = test.begin();
+    *it = false;
+    missionControl->filter(test);
 
     timer = new QTimer(this);
     timer->setSingleShot(false);

@@ -8,12 +8,13 @@ class DotOverlay : public MapOverlay
 {
     Q_OBJECT
 public:
-    DotOverlay(DisplayImage *parentImage, BeaconColor beaconColor);
+    DotOverlay(DisplayImage *parentImage, BeaconColor beaconColor, unsigned index);
     ~DotOverlay();
 
     QImage toImage();
     void reset();
     void setSensitivity(double value);
+    void filter(QVector<bool> filter);
 
 private:
     QCustomPlot *customPlot;
@@ -23,7 +24,9 @@ private:
     BeaconColor beaconColor;
     double colorMapMax;
     double colorMapMin;
-    double sensitivity = 1.0;
+    unsigned index;
+    bool active = true;
+    double sensitivity = 1.0;   
     const double SENSITIVITY_OFFSET = 10;
 
     double rssiNorm(int rssi);
