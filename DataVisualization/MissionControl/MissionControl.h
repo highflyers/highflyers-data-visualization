@@ -43,7 +43,7 @@ public slots:
     void newMessage(const Message &message);
     void reset();
     void setSensitivity(double value);
-    void filter(QVector<bool> filter);
+    void setFilter(QVector<bool> filter);
 };
 
 }

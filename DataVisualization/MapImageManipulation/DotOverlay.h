@@ -25,7 +25,7 @@ private:
     double colorMapMax;
     double colorMapMin;
     unsigned index;
-    bool active = true;
+    bool isFiltered = false;
     double sensitivity = 1.0;   
     const double SENSITIVITY_OFFSET = 10;
 

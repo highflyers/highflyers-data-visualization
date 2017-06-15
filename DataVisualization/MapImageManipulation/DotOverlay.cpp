@@ -71,13 +71,13 @@ DotOverlay::~DotOverlay()
 QImage DotOverlay::toImage()
 {
     QPixmap mapPixmap;
-    if(active){
+    if(!isFiltered){
         mapPixmap = customPlot->toPixmap(getWidth(), getHeight());
         return mapPixmap.toImage();
     } else {
-        //QImage resultImage = QImage(getWidth(), getHeight(), QImage::Format_ARGB32_Premultiplied);
-        //resultImage.fill(qRgba(0, 0, 0, 0));
-        return mapPixmap.toImage();
+        QImage resultImage = QImage(getWidth(), getHeight(), QImage::Format_ARGB32_Premultiplied);
+        resultImage.fill(qRgba(0, 0, 0, 0));
+        return resultImage;
     }
 }
 
@@ -102,8 +102,8 @@ void DotOverlay::setSensitivity(double value)
 
 void DotOverlay::filter(QVector<bool> filter)
 {
-    active = filter.at(index);
-    qDebug() << "Overlay number:" << index << " set active to: " << active;
+    isFiltered = filter.at(index);
+    qDebug() << "Overlay number:" << index << " set active to: " << isFiltered;
     parentImage->filter(filter);
 }
 

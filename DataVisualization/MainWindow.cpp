@@ -42,10 +42,6 @@ MainWindow::MainWindow(QWidget *parent) :
     inputLogger = new DataStorage::InputLogger(logDirName);
 
     missionControl = new MissionControl::MissionControl(mapFragment, this);
-    QVector<bool> test(10, true);
-    auto it = test.begin();
-    *it = false;
-    missionControl->filter(test);
 
     timer = new QTimer(this);
     timer->setSingleShot(false);
@@ -64,7 +60,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->ui->horizontalSlider->setValue(100);
     this->ui->widget_becon_select->setNumberOfBeacons(10);
-    connect(this->ui->widget_becon_select, SIGNAL(filterApplied(QVector<bool>)), this, SLOT(filterApplied(QVector<bool>)));
+    connect(this->ui->widget_becon_select, SIGNAL(filterApplied(QVector<bool>)), this->missionControl, SLOT(setFilter(QVector<bool>)));
 }
 
 MainWindow::~MainWindow()

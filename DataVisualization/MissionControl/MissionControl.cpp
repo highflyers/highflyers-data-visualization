@@ -86,7 +86,7 @@ void MissionControl::setSensitivity(double value)
     dotOnlyMap->setSensitivity(value);
 }
 
-void MissionControl::filter(QVector<bool> filter)
+void MissionControl::setFilter(QVector<bool> filter)
 {
     fullMapModel->filter(filter);
     noPathMap->filter(filter);

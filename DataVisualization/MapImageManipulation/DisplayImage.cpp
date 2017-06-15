@@ -88,5 +88,8 @@ void DisplayImage::setSensitivity(double value)
 
 void DisplayImage::filter(QVector<bool> filter)
 {
-
+    if(parentImage)
+    {
+        parentImage->filter(filter);
+    }
 }
