@@ -59,6 +59,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this->ui->output, SIGNAL(pointSelected(QGeoCoordinate)), this->ui->widget_coord, SLOT(update(QGeoCoordinate)));
 
     this->ui->horizontalSlider->setValue(100);
+    this->ui->widget_becon_select->setNumberOfBeacons(10);
+    connect(this->ui->widget_becon_select, SIGNAL(filterApplied(QVector<bool>)), this, SLOT(filterApplied(QVector<bool>)));
 }
 
 MainWindow::~MainWindow()
@@ -108,4 +110,9 @@ void MainWindow::on_pushButton_2_clicked()
     int value = this->ui->horizontalSlider->value();
     this->ui->label_sensitivity->setText(tr("Czułość") + " (" + QString::number(value) + "%)");
     missionControl->setSensitivity(value / 100.0);
+}
+
+void MainWindow::filterApplied(QVector<bool> filter)
+{
+    qDebug() << filter;
 }

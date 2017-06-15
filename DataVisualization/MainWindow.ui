@@ -77,6 +77,16 @@
        </widget>
       </item>
       <item>
+       <widget class="Line" name="line_3">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="BeaconSelectWidget" name="widget_becon_select" native="true"/>
+      </item>
+      <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -216,6 +226,12 @@
    <class>VehicleContainer</class>
    <extends>QWidget</extends>
    <header>GUI/VehicleContainer.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>BeaconSelectWidget</class>
+   <extends>QWidget</extends>
+   <header>GUI/BeaconSelectWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

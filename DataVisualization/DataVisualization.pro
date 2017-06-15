@@ -46,7 +46,8 @@ SOURCES += main.cpp\
     DataStorage/InputLogger.cpp \
     MapImageManipulation/DotOverlay.cpp \
     MapImageManipulation/CurrentLocationOverlay.cpp \
-    MapImageManipulation/MapOverlay.cpp
+    MapImageManipulation/MapOverlay.cpp \
+    GUI/BeaconSelectWidget.cpp
 
 HEADERS  += MainWindow.h \
     GUI/MapWidget.h \
@@ -71,11 +72,13 @@ HEADERS  += MainWindow.h \
     WebSocket/ServerStats.h \
     DataStorage/InputLogger.h \
     MapImageManipulation/DotOverlay.h \
-    MapImageManipulation/CurrentLocationOverlay.h
+    MapImageManipulation/CurrentLocationOverlay.h \
+    GUI/BeaconSelectWidget.h
 
 FORMS    += MainWindow.ui \
     GUI/ServerStatus.ui \
     GUI/TimeStatus.ui \
     GUI/VehicleWidget.ui \
     GUI/VehicleContainer.ui \
-    GUI/CoordinateDisplay.ui
+    GUI/CoordinateDisplay.ui \
+    GUI/BeaconSelectWidget.ui
