@@ -124,6 +124,7 @@ double DotOverlay::calculateWithSensitivity(double power)
     {
         power += SENSITIVITY_OFFSET;
     }
+    return power;
 }
 
 void DotOverlay::calculateWithSensitivityAllCells()
