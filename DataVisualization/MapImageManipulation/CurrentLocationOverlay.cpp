@@ -17,6 +17,7 @@ CurrentLocationOverlay::CurrentLocationOverlay(DisplayImage *parentImage, int dr
     customPlot->yAxis->grid()->setVisible(false);
 
     plotText = new QCPItemText(customPlot);
+    customPlot->setBackground(QColor(255,255,255,0));
 }
 
 CurrentLocationOverlay::~CurrentLocationOverlay()
@@ -28,6 +29,7 @@ CurrentLocationOverlay::~CurrentLocationOverlay()
 
 QImage CurrentLocationOverlay::toImage()
 {
+    customPlot->setBackground(QColor(255,255,255,0));
     QPixmap mapPixmap = customPlot->toPixmap(getWidth(), getHeight());
     return mapPixmap.toImage();
 }
