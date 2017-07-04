@@ -61,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->ui->horizontalSlider->setValue(100);
     this->ui->widget_becon_select->setNumberOfBeacons(10);
     connect(this->ui->widget_becon_select, SIGNAL(filterApplied(QVector<bool>)), this->missionControl, SLOT(setFilter(QVector<bool>)));
+    connect(this->ui->widget_becon_select, SIGNAL(filterApplied(QVector<bool>)), this, SLOT(timerTimeout()));
 }
 
 MainWindow::~MainWindow()

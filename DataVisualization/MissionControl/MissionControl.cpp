@@ -10,6 +10,11 @@ MissionControl::MissionControl(DisplayImage *mapFragment, QObject *parent) : QOb
     noPathMap = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(mapFragment, green, 7), green, 8), yellow, 4), yellow, 5), yellow, 6),red, 0), red, 1), red, 2), red, 3), black, 9);
     noMarksMap = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(mapFragment, green, 7), green, 8), yellow, 4), yellow, 5), yellow, 6),red, 0), red, 1), red, 2), red, 3), black, 9);
     dotOnlyMap = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(mapFragment, green, 7), green, 8), yellow, 4), yellow, 5), yellow, 6),red, 0), red, 1), red, 2), red, 3), black, 9);
+
+//    fullMapModel = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(mapFragment, green, 7), green, 8), yellow, 4), yellow, 5), yellow, 6),yellow, 0), red, 1), green, 2), red, 3), black, 9);
+//    noPathMap = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(mapFragment, green, 7), green, 8), yellow, 4), yellow, 5), yellow, 6),yellow, 0), red, 1), green, 2), red, 3), black, 9);
+//    noMarksMap = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(mapFragment, green, 7), green, 8), yellow, 4), yellow, 5), yellow, 6),yellow, 0), red, 1), green, 2), red, 3), black, 9);
+//    dotOnlyMap = new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(new DotOverlay(mapFragment, green, 7), green, 8), yellow, 4), yellow, 5), yellow, 6),yellow, 0), red, 1), green, 2), red, 3), black, 9);
 }
 
 DisplayImage* MissionControl::getDisplayImage()

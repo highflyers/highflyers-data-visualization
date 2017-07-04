@@ -207,6 +207,13 @@ void DotOverlay::processData(const Message &message)
 
 QImage DotOverlay::rewriteImage()
 {
-    colorMap->setDataRange(QCPRange(colorMapMin, colorMapMax));
-    return MapOverlay::rewriteImage();
+    QPixmap mapPixmap;
+    if(!isFiltered){
+        colorMap->setDataRange(QCPRange(colorMapMin, colorMapMax));
+        return MapOverlay::rewriteImage();
+    }
+    else
+    {
+        return parentImage->rewriteImage();
+    }
 }

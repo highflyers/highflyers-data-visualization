@@ -53,7 +53,10 @@ void VehicleWidget::newMessage(const Message &message)
     qDebug();
     this->ui->groupBox->setTitle(QString::number(message.ID) + " - " + message.name);
 //    this->ui->label_pos->setText(message.position.toString().replace(',', '\n'));
-    this->ui->label_pos->setText(message.position.toString());
+//    this->ui->label_pos->setText(message.position.toString());
+    this->ui->label_pos->setText(QString::number(message.position.latitude(), 'g', 6) + ", " +
+                                 QString::number(message.position.longitude(), 'g', 6) + ", " +
+            QString::number(message.position.altitude(), 'g', 6));
 
     double localMin = *std::min_element(message.data.begin(), message.data.end());
     if(chartMinMaxSet)
