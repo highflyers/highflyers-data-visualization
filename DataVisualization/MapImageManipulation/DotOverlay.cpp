@@ -1,7 +1,7 @@
 #include "DotOverlay.h"
 #include <QDebug>
 
-DotOverlay::DotOverlay(DisplayImage *parentImage, BeaconColor beaconColor) : MapOverlay(parentImage), beaconColor(beaconColor)
+DotOverlay::DotOverlay(DisplayImage *parentImage, BeaconColor beaconColor, unsigned index) : MapOverlay(parentImage), beaconColor(beaconColor), index(index)
 {
     customPlot = new QCustomPlot();
     customPlot->axisRect()->setAutoMargins(QCP::msNone);
@@ -70,8 +70,15 @@ DotOverlay::~DotOverlay()
 
 QImage DotOverlay::toImage()
 {
-    QPixmap mapPixmap = customPlot->toPixmap(getWidth(), getHeight());
-    return mapPixmap.toImage();
+    QPixmap mapPixmap;
+    if(!isFiltered){
+        mapPixmap = customPlot->toPixmap(getWidth(), getHeight());
+        return mapPixmap.toImage();
+    } else {
+        QImage resultImage = QImage(getWidth(), getHeight(), QImage::Format_ARGB32_Premultiplied);
+        resultImage.fill(qRgba(0, 0, 0, 0));
+        return resultImage;
+    }
 }
 
 void DotOverlay::reset()
@@ -91,6 +98,13 @@ void DotOverlay::setSensitivity(double value)
     this->sensitivity = value;
     calculateWithSensitivityAllCells();
     MapOverlay::setSensitivity(value);
+}
+
+void DotOverlay::filter(QVector<bool> filter)
+{
+    isFiltered = filter.at(index);
+    qDebug() << "Overlay number:" << index << " set active to: " << isFiltered;
+    parentImage->filter(filter);
 }
 
 double DotOverlay::rssiNorm(int rssi)
@@ -153,20 +167,21 @@ void DotOverlay::processData(const Message &message)
             qDebug() << "y: " << y;
 
             auto it = message.data.begin();
-            switch(beaconColor){
-                case green:
-                    it+=0;
-                    break;
-                case red:
-                    it+=1;
-                    break;
-                case yellow:
-                    it+=2;
-                    break;
-                case black:
-                    it+=4;
-                    break;
-            }
+            it += index;
+//            switch(beaconColor){
+//                case green:
+//                    it+=0;
+//                    break;
+//                case red:
+//                    it+=1;
+//                    break;
+//                case yellow:
+//                    it+=2;
+//                    break;
+//                case black:
+//                    it+=4;
+//                    break;
+//            }
             auto end_it = it+1;
             for(it; it!=end_it; ++it){
                 int rssi = *it;
@@ -192,6 +207,13 @@ void DotOverlay::processData(const Message &message)
 
 QImage DotOverlay::rewriteImage()
 {
-    colorMap->setDataRange(QCPRange(colorMapMin, colorMapMax));
-    return MapOverlay::rewriteImage();
+    QPixmap mapPixmap;
+    if(!isFiltered){
+        colorMap->setDataRange(QCPRange(colorMapMin, colorMapMax));
+        return MapOverlay::rewriteImage();
+    }
+    else
+    {
+        return parentImage->rewriteImage();
+    }
 }

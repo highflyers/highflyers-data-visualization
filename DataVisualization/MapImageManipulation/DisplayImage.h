@@ -26,6 +26,7 @@ public slots:
     virtual QImage rewriteImage();
     virtual void reset();
     virtual void setSensitivity(double value);
+    virtual void filter(QVector<bool> filter);
 
 protected:
     DisplayImage *parentImage;
